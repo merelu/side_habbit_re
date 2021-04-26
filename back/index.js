@@ -1,23 +1,26 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
+const config = require("./config/key");
+const apiRouter = require("./routes/api");
 const app = express();
 const port = 5000;
 mongoose
-  .connect(
-    "mongodb+srv://gyuha:1234@react-boiler-plate.rwqey.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-    }
-  )
+  .connect(config.mongoURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+  })
   .then(() => console.log("MongoDB connected..."))
   .catch((err) => console.log(err));
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/api", apiRouter);
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Hello World!~~~~~");
 });
 
 app.listen(port, () => {
