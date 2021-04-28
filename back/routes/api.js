@@ -1,9 +1,9 @@
 const { User } = require("../models/User");
 const express = require("express");
-
+const { auth } = require("../middlewares/auth");
 const router = express.Router();
 
-router.post("/register", (req, res, next) => {
+router.post("/users/register", (req, res, next) => {
   const user = new User(req.body);
 
   user.save((err, userInfo) => {
@@ -16,7 +16,7 @@ router.post("/register", (req, res, next) => {
   });
 });
 
-router.post("/login", (req, res, next) => {
+router.post("/users/login", (req, res, next) => {
   //요청된 이메일을 데이터 베이스에 있는지 찾는다.
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {
@@ -47,4 +47,17 @@ router.post("/login", (req, res, next) => {
   });
 });
 
+router.get("/users/auth", auth, (req, res) => {
+  //여기 까지 미들웨어를 통과해 왔다는 얘기는 Authentication이 True라는 말이다.
+  res.status(200).json({
+    _id: req.user._id,
+    isAdmin: req.user.role === 1 ? false : true,
+    isAuth: true,
+    email: req.user.email,
+    name: req.user.name,
+    lastname: req.user.lastname,
+    role: req.user.role,
+    image: req.user.image,
+  });
+});
 module.exports = router;
