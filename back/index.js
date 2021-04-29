@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-
 const config = require("./config/key");
 const apiRouter = require("./routes/api");
 const app = express();
