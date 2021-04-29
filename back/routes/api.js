@@ -75,4 +75,9 @@ router.get("/users/logout", auth, (req, res) => {
     }
   );
 });
+
+router.get("/hello", (req, res) => {
+  res.send("안녕하세요~");
+});
+
 module.exports = router;
