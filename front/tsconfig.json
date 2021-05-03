@@ -27,7 +27,9 @@
       "@pages/*": ["src/pages/*"],
       "@utils/*": ["src/utils/*"],
       "@typings/*": ["src/typings/*"],
-      "@store/*":["src/store/*"]
+      "@store/*":["src/store/*"],
+      "@_actions/*":["src/_actions/*"],
+      "@_reducers/*":["src/_reducers/*"],
     }
   },
   "include": [
