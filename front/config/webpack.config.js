@@ -336,7 +336,7 @@ module.exports = function (webpackEnv) {
         "@_actions": path.resolve(__dirname, "../src/_actions"),
         "@_reducers": path.resolve(__dirname, "../src/_reducers"),
         "@components": path.resolve(__dirname, "../src/components"),
-        "@views": path.resolve(__dirname, "../src/views"),
+        "@pages": path.resolve(__dirname, "../src/pages"),
         "@utils": path.resolve(__dirname, "../src/utils"),
         "@hoc": path.resolve(__dirname, "../src/hoc"),
         "@store": path.resolve(__dirname, "../src/store"),
