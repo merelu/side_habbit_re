@@ -1,15 +1,16 @@
 import React from "react";
 import { Route, Switch } from "react-router";
-import LandingPage from "./views/LandingPage";
-import LoginPage from "./views/LoginPage";
-import RegisterPage from "./views/RegisterPage";
+import LandingPage from "@pages/LandingPage";
+import LoginPage from "@pages/LoginPage";
+import RegisterPage from "@pages/RegisterPage";
+import Auth from "@hoc/Auth";
 
 function App() {
   return (
     <Switch>
-      <Route path="/" exact component={LandingPage} />
-      <Route path="/login" component={LoginPage} />
-      <Route path="/register" component={RegisterPage} />
+      <Route path="/" exact component={Auth(LandingPage, null)} />
+      <Route path="/login" component={Auth(LoginPage, false)} />
+      <Route path="/register" component={Auth(RegisterPage, false)} />
     </Switch>
   );
 }
