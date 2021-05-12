@@ -2,18 +2,23 @@ import {
   configureStore,
   ThunkAction,
   Action,
-  getDefaultMiddleware,
   combineReducers,
 } from "@reduxjs/toolkit";
-import user_reducer from "@_reducers/user_reducer";
+import { userSlice } from "@_reducers/userSlice";
+import { connectRouter, routerMiddleware } from "connected-react-router";
+import { createBrowserHistory } from "history";
+
+export const history = createBrowserHistory();
 
 const reducer = combineReducers({
-  user_reducer,
+  router: connectRouter(history),
+  user: userSlice.reducer,
 });
 
 export const store = configureStore({
   reducer,
-  middleware: [...getDefaultMiddleware({})],
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(routerMiddleware(history)),
   devTools: true,
 });
 
