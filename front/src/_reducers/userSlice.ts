@@ -1,16 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IUser } from "@typings/db";
-import { logInUser, logOutUser, registerUser } from "@_actions/user_action";
+import {
+  authUser,
+  logInUser,
+  logOutUser,
+  registerUser,
+} from "@_actions/user_action";
 
 interface IUserState {
   isLoading: boolean;
-  data: IUser | null;
+  userData: IUser | null;
+  register: string | null;
   error: string | null | undefined;
 }
 
 const initialState: IUserState = {
   isLoading: false,
-  data: null,
+  userData: null,
+  register: null,
   error: null,
 };
 
@@ -21,18 +28,19 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(logInUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data = action.payload;
       state.error = null;
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data = action.payload;
-      state.error = null;
+      state.register = action.payload.email;
     });
     builder.addCase(logOutUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.data = null;
-      state.error = null;
+      state.userData = null;
+    });
+    builder.addCase(authUser.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.userData = action.payload.data;
     });
     builder.addMatcher(
       (action) => {
@@ -40,6 +48,7 @@ export const userSlice = createSlice({
       },
       (state, action) => {
         state.isLoading = true;
+        state.error = null;
       }
     );
     builder.addMatcher(
