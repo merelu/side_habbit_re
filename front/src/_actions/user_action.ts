@@ -7,26 +7,32 @@ interface MyKnownError {
   errorMessage: string;
 }
 
-interface ILoginData {
+interface ILoginBodyData {
   email: string;
   password: string;
 }
+interface ILoginReturn {
+  loginSuccess: boolean;
+}
 
-interface IRegisterData {
+interface IRegisterBodyData {
   email: string;
   name: string;
   password: string;
 }
+interface IRegisterReturn {
+  email: string;
+}
 
 export const logInUser = createAsyncThunk<
-  IUser,
-  ILoginData,
+  ILoginReturn,
+  ILoginBodyData,
   { rejectValue: MyKnownError }
->("users/login", async (dataToSubmit, thunkApi) => {
+>("users/login", async (body, thunkApi) => {
   try {
-    const response = await axios.post("/api/users/login", dataToSubmit);
+    const response = await axios.post("/api/users/login", body);
     thunkApi.dispatch(push("/"));
-    return (await response.data) as IUser;
+    return (await response.data) as ILoginReturn;
   } catch (err) {
     let error: AxiosError<MyKnownError> = err;
     if (!error.response) {
@@ -57,19 +63,16 @@ export const logOutUser = createAsyncThunk("users/logout", async () => {
 });
 
 export const registerUser = createAsyncThunk<
-  IUser,
-  IRegisterData,
+  IRegisterReturn,
+  IRegisterBodyData,
   {
     rejectValue: MyKnownError;
   }
->("users/register", async (dataToSubmit, thunkApi) => {
+>("users/register", async (body, thunkApi) => {
   try {
-    const response = await axios.post<IUser>(
-      "/api/users/register",
-      dataToSubmit
-    );
+    const response = await axios.post("/api/users/register", body);
     await thunkApi.dispatch(push("/login"));
-    return (await response.data) as IUser;
+    return (await response.data) as IRegisterReturn;
   } catch (err) {
     let error: AxiosError<MyKnownError> = err;
     if (!error.response) {
@@ -81,4 +84,9 @@ export const registerUser = createAsyncThunk<
       throw err;
     }
   }
+});
+
+export const authUser = createAsyncThunk("users/auth", async (data) => {
+  const response = await axios.get("/api/users/auth");
+  return await response.data;
 });
