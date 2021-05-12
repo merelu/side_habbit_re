@@ -1,6 +1,10 @@
 export interface IUser {
-  id: string;
+  _id: string;
+  isAuth: boolean;
+  isAdmin: boolean;
   name: string;
   email: string;
-  role: number;
+  lastname: string;
+  role: boolean;
+  image: string;
 }
