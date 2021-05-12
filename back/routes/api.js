@@ -9,7 +9,12 @@ router.post("/users/register", (req, res, next) => {
   user.save((err, userInfo) => {
     if (err)
       return res.status(401).json({ errorMessage: "아이디가 중복됩니다." });
-    return res.status(200).send("ok");
+    return res.status(200).send({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    });
   });
 });
 
@@ -33,6 +38,7 @@ router.post("/users/login", (req, res, next) => {
             .status(401)
             .json({ errorMessage: "토큰생성에 실패했습니다." });
         res.cookie("x_auth", user.token).status(200).json({
+          success: true,
           id: user._id,
           name: user.name,
           email: user.email,
@@ -48,7 +54,6 @@ router.get("/users/auth", auth, (req, res) => {
   //여기 까지 미들웨어를 통과해 왔다는 얘기는 Authentication이 True라는 말이다.
   res.status(200).json({
     _id: req.user._id,
-    isAdmin: req.user.role === 1 ? false : true,
     isAuth: true,
     email: req.user.email,
     name: req.user.name,
@@ -66,9 +71,7 @@ router.get("/users/logout", auth, (req, res) => {
     },
     (err, user) => {
       if (err) return res.status(500).json({ errorMessage: "로그아웃 실패" });
-      return res.status(200).send({
-        success: true,
-      });
+      return res.status(200).send("ok");
     }
   );
 });
