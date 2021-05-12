@@ -5,7 +5,7 @@ import React, { useCallback, useEffect } from "react";
 
 function LoginPage() {
   const dispatch = useAppDispatch();
-  const { data } = useAppSelector((state) => state.user);
+  const { userData } = useAppSelector((state) => state.user);
   const [email, onChangeEmail, setEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
 
@@ -21,8 +21,8 @@ function LoginPage() {
     [dispatch, email, password]
   );
   useEffect(() => {
-    setEmail(data?.email ? data.email : "");
-  }, [data?.email, setEmail]);
+    setEmail(userData?.email ? userData.email : "");
+  }, [userData?.email, setEmail]);
 
   return (
     <div

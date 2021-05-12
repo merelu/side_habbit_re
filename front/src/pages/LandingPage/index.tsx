@@ -4,7 +4,7 @@ import { logOutUser } from "@_actions/user_action";
 
 function LandingPage() {
   const dispatch = useAppDispatch();
-  const { data } = useAppSelector((state) => state.user);
+  const { userData } = useAppSelector((state) => state.user);
   const logoutHandler = useCallback(() => {
     dispatch(logOutUser());
   }, [dispatch]);
@@ -18,7 +18,7 @@ function LandingPage() {
         height: "100vh",
       }}
     >
-      {data?.email}
+      {userData?.email}
       <h2>시작페이지</h2>
       <button onClick={logoutHandler}>로그아웃</button>
     </div>
