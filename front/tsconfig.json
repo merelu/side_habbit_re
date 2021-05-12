@@ -30,6 +30,7 @@
       "@store/*":["src/store/*"],
       "@_actions/*":["src/_actions/*"],
       "@_reducers/*":["src/_reducers/*"],
+      "@hoc/*":["src/hoc/*"],
     }
   },
   "include": [
