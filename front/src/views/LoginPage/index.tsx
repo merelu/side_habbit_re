@@ -1,29 +1,29 @@
-import { useAppDispatch } from "@store/hooks";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
 import useInput from "@utils/useInput";
-import React, { useCallback } from "react";
-import { loginUser } from "@_actions/user_action";
+import { logInUser } from "@_actions/user_action";
+import React, { useCallback, useEffect } from "react";
 
 function LoginPage() {
   const dispatch = useAppDispatch();
-  const [email, onChangeEmail] = useInput("");
+  const { data } = useAppSelector((state) => state.user);
+  const [email, onChangeEmail, setEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
 
   const onSubmitHandler = useCallback(
     (e) => {
       e.preventDefault();
-      let body = {
+      const body = {
         email,
         password,
       };
-      dispatch(loginUser(body)).payload.then((response) => {
-        if (response.playload.loginSuccess) {
-        } else {
-          alert("Error");
-        }
-      });
+      dispatch(logInUser(body));
     },
     [dispatch, email, password]
   );
+  useEffect(() => {
+    setEmail(data?.email ? data.email : "");
+  }, [data?.email, setEmail]);
+
   return (
     <div
       style={{

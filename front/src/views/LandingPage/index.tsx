@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React, { useCallback } from "react";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { logOutUser } from "@_actions/user_action";
 
 function LandingPage() {
-  useEffect(() => {
-    axios.get("/api/hello").then((response) => console.log(response));
-  }, []);
+  const dispatch = useAppDispatch();
+  const { data } = useAppSelector((state) => state.user);
+  const logoutHandler = useCallback(() => {
+    dispatch(logOutUser());
+  }, [dispatch]);
   return (
     <div
       style={{
@@ -15,7 +18,9 @@ function LandingPage() {
         height: "100vh",
       }}
     >
+      {data?.email}
       <h2>시작페이지</h2>
+      <button onClick={logoutHandler}>로그아웃</button>
     </div>
   );
 }
