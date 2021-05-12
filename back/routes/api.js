@@ -10,10 +10,6 @@ router.post("/users/register", (req, res, next) => {
     if (err)
       return res.status(401).json({ errorMessage: "아이디가 중복됩니다." });
     return res.status(200).send({
-<<<<<<< HEAD
-=======
-      success: true,
->>>>>>> 3fd2e7388f8fcf12b8c578e44507158fc6eef489
       id: user._id,
       name: user.name,
       email: user.email,
