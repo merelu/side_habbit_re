@@ -54,7 +54,7 @@ router.get("/users/auth", auth, (req, res) => {
   //여기 까지 미들웨어를 통과해 왔다는 얘기는 Authentication이 True라는 말이다.
   res.status(200).json({
     _id: req.user._id,
-    isAuth: true,
+    isAuth: req.user.role === 0 ? false : true,
     email: req.user.email,
     name: req.user.name,
     lastname: req.user.lastname,
