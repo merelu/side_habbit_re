@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
 import { history, store } from "@store/store";
 import { ConnectedRouter } from "connected-react-router";
-import "antd/dist/antd.css";
 
 ReactDOM.render(
   <Provider store={store}>
