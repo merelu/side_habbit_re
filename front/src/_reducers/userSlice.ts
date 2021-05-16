@@ -9,16 +9,14 @@ import {
 
 interface IUserState {
   isLoading: boolean;
-  userData: IUser | null;
-  register: string | null;
-  error: string | null | undefined;
+  userData: IUser;
+  register: string;
 }
 
 const initialState: IUserState = {
   isLoading: false,
-  userData: null,
-  register: null,
-  error: null,
+  userData: {},
+  register: "",
 };
 
 export const userSlice = createSlice({
@@ -28,7 +26,6 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(logInUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.error = null;
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.isLoading = false;
@@ -36,11 +33,11 @@ export const userSlice = createSlice({
     });
     builder.addCase(logOutUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.userData = null;
+      state.userData = {};
     });
     builder.addCase(authUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.userData = action.payload.data;
+      state.userData = action.payload;
     });
     builder.addMatcher(
       (action) => {
@@ -48,7 +45,6 @@ export const userSlice = createSlice({
       },
       (state, action) => {
         state.isLoading = true;
-        state.error = null;
       }
     );
     builder.addMatcher(
@@ -56,11 +52,6 @@ export const userSlice = createSlice({
         return action.type.includes("/rejected");
       },
       (state, action) => {
-        if (action.payload) {
-          state.error = action.payload.errorMessage;
-        } else {
-          state.error = action.error.message;
-        }
         state.isLoading = false;
       }
     );
