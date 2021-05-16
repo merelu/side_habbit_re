@@ -11,7 +11,6 @@ const auth = (req, res, next) => {
     if (!user)
       return res.json({
         isAuth: false,
-        errorMessage: "인증되지 않은 유저입니다.",
       });
 
     req.token = token;
