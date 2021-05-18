@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const dayjs = require("dayjs");
 
 const saltRounds = 10;
 
@@ -17,10 +18,6 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
     minlength: 5,
-  },
-  lastname: {
-    type: String,
-    maxlength: 50,
   },
   role: {
     type: Number,
@@ -66,6 +63,8 @@ userSchema.methods.generateToken = function (callback) {
   //jsonwebtoken을 이용해서 token을 생성하기
   let user = this;
   let token = jwt.sign(user._id.toHexString(), "secretToken");
+  let onehour = dayjs().add(1, "hour").valueOf();
+  user.tokenExp = onehour;
   user.token = token;
   user.save(function (err, user) {
     if (err) return callback(err);
