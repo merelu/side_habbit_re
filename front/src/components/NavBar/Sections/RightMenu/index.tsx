@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { Menu } from "antd";
-import { Link, withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { logOutUser } from "@_actions/user_action";
 import { MenuMode } from "antd/lib/menu";
