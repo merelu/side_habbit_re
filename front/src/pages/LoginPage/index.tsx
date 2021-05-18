@@ -156,7 +156,7 @@ function LoginPage() {
                     Log in
                   </Button>
                 </div>
-                Or <Link to="/regitster">register now!</Link>
+                Or <Link to="/register">register now!</Link>
               </Form.Item>
             </Form>
           </div>

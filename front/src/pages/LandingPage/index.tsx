@@ -18,9 +18,8 @@ function LandingPage() {
         height: "100vh",
       }}
     >
-      {userData?.email}
+      <img src={userData?.image} alt={userData.email} />
       <h2>시작페이지</h2>
-      <button onClick={logoutHandler}>로그아웃</button>
     </div>
   );
 }
