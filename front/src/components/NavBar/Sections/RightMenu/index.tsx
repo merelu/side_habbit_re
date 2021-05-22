@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { logOutUser } from "@_actions/user_action";
 import { MenuMode } from "antd/lib/menu";
+import { push } from "connected-react-router";
 
 interface IRightMenu {
   mode: MenuMode;
@@ -12,7 +13,14 @@ function RightMenu({ mode }: IRightMenu) {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.user);
   const logoutHandler = useCallback(() => {
-    dispatch(logOutUser());
+    dispatch(logOutUser()).then((response) => {
+      if (response.payload.success) {
+        dispatch(push("/login"));
+        window.localStorage.removeItem("userId");
+      } else {
+        alert("Log Out Failed");
+      }
+    });
   }, [dispatch]);
   if (user.userData && !user.userData.isAuth) {
     return (
