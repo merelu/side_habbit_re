@@ -2,7 +2,7 @@ import styled from "@emotion/styled";
 import { Button, Drawer } from "antd";
 
 export const Nav = styled.nav`
-  position: fixed;
+  position: sticky;
   display: flex;
   width: 100%;
   height: 60px;
