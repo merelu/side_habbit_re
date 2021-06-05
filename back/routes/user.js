@@ -1,74 +1,68 @@
-const { User } = require("../models/User");
 const express = require("express");
-const { auth } = require("../middlewares/auth");
+const passport = require("passport");
+
+const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
+const User = require("../models/User");
+
 const router = express.Router();
 
-router.post("/register", (req, res, next) => {
-  const user = new User(req.body);
-
-  user.save((err, doc) => {
-    if (err) return res.status(401).json({ success: false, err });
-    return res.status(200).json({
-      success: true,
-    });
-  });
+router.get("/auth", (req, res, next) => {
+  return res.json(req.user || false);
 });
 
-router.post("/login", (req, res, next) => {
-  //요청된 이메일을 데이터 베이스에 있는지 찾는다.
-  User.findOne({ email: req.body.email }, (err, user) => {
-    if (!user) {
-      return res.status(401).json({
-        loginSuccess: false,
-        message: "Auth failed, email not found",
-      });
+router.post("/register", isNotLoggedIn, async (req, res, next) => {
+  try {
+    const exUser = await User.findOne({ email: req.body.email });
+    if (exUser) {
+      res.status(403).send("이미 사용 중인 이메일 입니다.");
     }
-    //요청한 이메일이 데이터 베이스에 있다면 비밀번호가 같은지 찾는다.
-    user.comparePassword(req.body.password, (err, isMatch) => {
-      if (!isMatch) {
-        return res
-          .status(401)
-          .json({ loginSuccess: false, message: "Wrong password" });
+    const hashedPassword = await bcrypt.hash(req.body.password, 12);
+
+    const user = new User({
+      email: req.body.email,
+      name: req.body.name,
+      password: hashedPassword,
+    });
+
+    user.save();
+
+    res.status(201).json("ok");
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+});
+
+router.post("/login", isNotLoggedIn, (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    if (info) {
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, async (loginErr) => {
+      if (loginErr) {
+        console.error(loginErr);
+        return next(loginErr);
       }
-      //비밀번호가 맞다면 토큰을 생성한다.
-      user.generateToken((err, user) => {
-        if (err) return res.status(401).send(err);
-        res.cookie("x_authExp", user.tokenExp);
-        res.cookie("x_auth", user.token).status(200).json({
-          loginSuccess: true,
-          userId: user._id,
-        });
-        // 토큰을 저장한다. 어디에? 쿠키, 로컬스토리지
-      });
+      return res
+        .status(200)
+        .json(
+          await User.findOne(
+            { _id: user._id },
+            { name: 1, email: 1, role: 1, image: 1 }
+          )
+        );
     });
-  });
+  })(req, res, next);
 });
 
-router.get("/auth", auth, (req, res) => {
-  res.status(200).json({
-    _id: req.user._id,
-    isAdmin: req.user.role === 0 ? false : true,
-    isAuth: true,
-    email: req.user.email,
-    name: req.user.name,
-    lastname: req.user.lastname,
-    role: req.user.role,
-    image: req.user.image,
-  });
-});
-
-router.get("/logout", auth, (req, res) => {
-  User.findOneAndUpdate(
-    { _id: req.user._id },
-    {
-      token: "",
-      tokenExp: "",
-    },
-    (err, doc) => {
-      if (err) return res.status(401).json({ success: false, err });
-      return res.status(200).json({ success: true });
-    }
-  );
+router.get("/logout", isLoggedIn, (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.send("ok");
 });
 
 module.exports = router;
