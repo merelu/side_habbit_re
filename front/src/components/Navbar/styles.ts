@@ -4,8 +4,4 @@ export const useNavBarStyles = makeStyles({
   toobar: {
     justifyContent: "space-between",
   },
-  link: {
-    textDecoration: "none",
-    color: "inherit",
-  },
 });

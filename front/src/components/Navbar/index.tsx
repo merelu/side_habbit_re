@@ -6,16 +6,14 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import DrawerMenu from "../DrawerMenu";
 import { useNavBarStyles } from "./styles";
 
-const MainNavbar = () => {
+function MainNavbar() {
   const classes = useNavBarStyles();
   return (
     <>
       <AppBar position="sticky" color="transparent">
         <Toolbar className={classes.toobar}>
           <Typography variant="h6" color="primary">
-            <Link className={classes.link} to="/">
-              Side_Habbit
-            </Link>
+            <Link to="/">Side_Habbit</Link>
           </Typography>
           <Hidden smDown>
             <Link to="/login">
@@ -29,6 +27,6 @@ const MainNavbar = () => {
       </AppBar>
     </>
   );
-};
+}
 
 export default MainNavbar;
