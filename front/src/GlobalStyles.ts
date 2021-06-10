@@ -21,6 +21,7 @@ const useStyles = makeStyles(() =>
       },
       a: {
         textDecoration: "none",
+        color: "inherit",
       },
       "#root": {
         height: "100%",
