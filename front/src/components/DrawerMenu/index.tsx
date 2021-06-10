@@ -8,7 +8,6 @@ import {
 } from "@material-ui/core";
 import React, { useCallback, useState } from "react";
 import MenuIcon from "@material-ui/icons/Menu";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import { Link } from "react-router-dom";
 import { useDrawerMenuStyles } from "./styles";
@@ -16,17 +15,17 @@ import { useDrawerMenuStyles } from "./styles";
 type TMenuItems = {
   name: string;
   url: string;
-  icon: "signIn" | "signUp";
+  icon: "login" | "signUp";
 };
 const menuItems: TMenuItems[] = [
   {
-    name: "SignIn",
-    url: "/signIn",
-    icon: "signIn",
+    name: "Login",
+    url: "/login",
+    icon: "login",
   },
 ];
 
-const DrawerMenu = () => {
+function DrawerMenu() {
   const classes = useDrawerMenuStyles();
   const [drawer, setDrawer] = useState(false);
 
@@ -40,14 +39,16 @@ const DrawerMenu = () => {
       }
       setDrawer(open);
     };
+
   const selectIcon = useCallback((value) => {
     switch (value) {
-      case "signIn":
+      case "login":
         return <GitHubIcon />;
       default:
         return <div>undefined</div>;
     }
   }, []);
+
   const menuItemList = (
     <div
       className={classes.list}
@@ -56,7 +57,7 @@ const DrawerMenu = () => {
     >
       <List>
         {menuItems.map((item) => (
-          <Link to={item.url} className={classes.link}>
+          <Link to={item.url}>
             <ListItem button key={item.name}>
               <ListItemIcon>{selectIcon(item.icon)}</ListItemIcon>
               <ListItemText primary={item.name} />
@@ -76,6 +77,6 @@ const DrawerMenu = () => {
       </Drawer>
     </React.Fragment>
   );
-};
+}
 
 export default DrawerMenu;
