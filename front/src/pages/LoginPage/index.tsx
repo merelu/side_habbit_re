@@ -11,7 +11,7 @@ import {
   FormControlLabel,
   Typography,
 } from "@material-ui/core";
-import { useloginPageStyles } from "./styles";
+import { useLoginPageStyles } from "./styles";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { push } from "connected-react-router";
@@ -25,7 +25,7 @@ const loginSchema = Yup.object().shape({
 
 function LoginPage() {
   const dispatch = useAppDispatch();
-  const classes = useloginPageStyles();
+  const classes = useLoginPageStyles();
   const rememberMeChecked = localStorage.getItem("rememberMe") ? true : false;
   const [rememberMe, setRememberMe] = useState(rememberMeChecked);
   const [loginError, setLoginError] = useState(false);

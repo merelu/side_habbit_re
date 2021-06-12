@@ -1,6 +1,6 @@
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 
-export const useloginPageStyles = makeStyles((theme: Theme) =>
+export const useLoginPageStyles = makeStyles((theme: Theme) =>
   createStyles({
     form: { marginTop: 100 },
     box: {
