@@ -57,12 +57,12 @@ function DrawerMenu() {
     >
       <List>
         {menuItems.map((item) => (
-          <Link to={item.url}>
-            <ListItem button key={item.name}>
+          <ListItem button key={item.name}>
+            <Link to={item.url}>
               <ListItemIcon>{selectIcon(item.icon)}</ListItemIcon>
               <ListItemText primary={item.name} />
-            </ListItem>
-          </Link>
+            </Link>
+          </ListItem>
         ))}
       </List>
     </div>
