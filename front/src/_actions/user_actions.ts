@@ -19,7 +19,7 @@ export const logoutUser = createAsyncThunk("users/logout", async () => {
 });
 
 export const registerUser = createAsyncThunk(
-  "users/auth",
+  "users/register",
   async (body, thunkApi) => {
     try {
       const response = await axios.post("/api/users/register", body);
@@ -32,5 +32,5 @@ export const registerUser = createAsyncThunk(
 
 export const authUser = createAsyncThunk("users/auth", async () => {
   const response = await axios.get("/api/users/auth");
-  return await response.data;
+  return (await response.data) ? response.data : null;
 });
