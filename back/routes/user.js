@@ -7,6 +7,7 @@ const { User } = require("../models/User");
 const router = express.Router();
 
 router.get("/auth", (req, res, next) => {
+  console.log(req.user);
   return res.json(req.user || false);
 });
 
