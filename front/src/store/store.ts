@@ -6,11 +6,13 @@ import {
 } from "@reduxjs/toolkit";
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
+import { userSlice } from "../_reducers/userSlice";
 
 export const history = createBrowserHistory();
 
 const reducer = combineReducers({
   router: connectRouter(history),
+  user: userSlice.reducer,
 });
 
 export const store = configureStore({
