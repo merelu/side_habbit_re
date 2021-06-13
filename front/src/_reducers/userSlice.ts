@@ -9,14 +9,12 @@ import {
 
 interface IUserReducerState {
   isLoading: boolean;
-  userData: IUser;
-  register: string;
+  userData: IUser | null;
 }
 
 const initialState: IUserReducerState = {
   isLoading: false,
-  userData: {},
-  register: "",
+  userData: null,
 };
 
 export const userSlice = createSlice({
@@ -29,11 +27,10 @@ export const userSlice = createSlice({
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.register = action.payload.email;
     });
     builder.addCase(logoutUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.userData = {};
+      state.userData = null;
     });
     builder.addCase(authUser.fulfilled, (state, action) => {
       state.isLoading = false;
