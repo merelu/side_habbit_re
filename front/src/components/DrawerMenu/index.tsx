@@ -5,11 +5,14 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Divider,
 } from "@material-ui/core";
 import React, { useCallback, useState } from "react";
 import MenuIcon from "@material-ui/icons/Menu";
 import GitHubIcon from "@material-ui/icons/GitHub";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { Link } from "react-router-dom";
 import { useDrawerMenuStyles } from "./styles";
 import { useAppDispatch } from "../../store/hooks";
 import { push } from "connected-react-router";
@@ -38,6 +41,9 @@ function DrawerMenu({ userData, onClickLogout }: IDrawerMenu) {
   const onClickLogin = useCallback(() => {
     dispatch(push("/login"));
   }, [dispatch]);
+  const onClickMyHabbit = useCallback(() => {
+    dispatch(push("/myHabbit"));
+  }, [dispatch]);
 
   const menuItemList = (
     <div
@@ -47,16 +53,25 @@ function DrawerMenu({ userData, onClickLogout }: IDrawerMenu) {
     >
       <List>
         {userData ? (
-          <ListItem button key="logout" onClick={onClickLogout}>
-            <ListItemIcon>
-              <ExitToAppIcon />
-            </ListItemIcon>
-            <ListItemText primary="Logout" />
-          </ListItem>
+          <div>
+            <ListItem button key="myHabbit" onClick={onClickMyHabbit}>
+              <ListItemIcon>
+                <AssignmentIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText color="primary" primary="My Habbit" />
+            </ListItem>
+            <Divider />
+            <ListItem button key="logout" onClick={onClickLogout}>
+              <ListItemIcon>
+                <ExitToAppIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText color="primary" primary="Logout" />
+            </ListItem>
+          </div>
         ) : (
           <ListItem button key="login" onClick={onClickLogin}>
             <ListItemIcon>
-              <GitHubIcon />
+              <GitHubIcon color="primary" />
             </ListItemIcon>
             <ListItemText primary="Login" />
           </ListItem>
@@ -67,7 +82,7 @@ function DrawerMenu({ userData, onClickLogout }: IDrawerMenu) {
   return (
     <React.Fragment>
       <IconButton edge="end" onClick={handleDrawerToggle(true)}>
-        <MenuIcon />
+        <MenuIcon color="primary" />
       </IconButton>
       <Drawer anchor="right" open={drawer} onClose={handleDrawerToggle(false)}>
         {menuItemList}
