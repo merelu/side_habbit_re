@@ -9,23 +9,19 @@ import {
 import React, { useCallback, useState } from "react";
 import MenuIcon from "@material-ui/icons/Menu";
 import GitHubIcon from "@material-ui/icons/GitHub";
-import { Link } from "react-router-dom";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useDrawerMenuStyles } from "./styles";
+import { useAppDispatch } from "../../store/hooks";
+import { push } from "connected-react-router";
+import { IUser } from "../../typings/db";
 
-type TMenuItems = {
-  name: string;
-  url: string;
-  icon: "login" | "signUp";
-};
-const menuItems: TMenuItems[] = [
-  {
-    name: "Login",
-    url: "/login",
-    icon: "login",
-  },
-];
+interface IDrawerMenu {
+  onClickLogout: () => void;
+  userData: IUser | null;
+}
+function DrawerMenu({ userData, onClickLogout }: IDrawerMenu) {
+  const dispatch = useAppDispatch();
 
-function DrawerMenu() {
   const classes = useDrawerMenuStyles();
   const [drawer, setDrawer] = useState(false);
 
@@ -39,15 +35,9 @@ function DrawerMenu() {
       }
       setDrawer(open);
     };
-
-  const selectIcon = useCallback((value) => {
-    switch (value) {
-      case "login":
-        return <GitHubIcon />;
-      default:
-        return <div>undefined</div>;
-    }
-  }, []);
+  const onClickLogin = useCallback(() => {
+    dispatch(push("/login"));
+  }, [dispatch]);
 
   const menuItemList = (
     <div
@@ -56,14 +46,21 @@ function DrawerMenu() {
       onKeyDown={handleDrawerToggle(false)}
     >
       <List>
-        {menuItems.map((item) => (
-          <ListItem button key={item.name}>
-            <Link to={item.url}>
-              <ListItemIcon>{selectIcon(item.icon)}</ListItemIcon>
-              <ListItemText primary={item.name} />
-            </Link>
+        {userData ? (
+          <ListItem button key="logout" onClick={onClickLogout}>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
           </ListItem>
-        ))}
+        ) : (
+          <ListItem button key="login" onClick={onClickLogin}>
+            <ListItemIcon>
+              <GitHubIcon />
+            </ListItemIcon>
+            <ListItemText primary="Login" />
+          </ListItem>
+        )}
       </List>
     </div>
   );
