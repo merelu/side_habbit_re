@@ -7,6 +7,7 @@ import GlobalStyles from "./GlobalStyles";
 import Auth from "./hocs/Auth";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
+import MyHabbitPage from "./pages/MyHabbitPage";
 import RegisterPage from "./pages/RegisterPage";
 import theme from "./theme";
 
@@ -27,6 +28,7 @@ function App() {
           <Route exact path="/" component={Auth(LandingPage, null)} />
           <Route path="/login" component={Auth(LoginPage, false)} />
           <Route path="/register" component={Auth(RegisterPage, false)} />
+          <Route path="/myHabbit" component={Auth(MyHabbitPage, true)} />
         </Switch>
       </Container>
     </ThemeProvider>
