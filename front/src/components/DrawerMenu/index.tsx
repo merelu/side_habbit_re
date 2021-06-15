@@ -10,9 +10,13 @@ import {
 import React, { useCallback, useState } from "react";
 import MenuIcon from "@material-ui/icons/Menu";
 import GitHubIcon from "@material-ui/icons/GitHub";
+<<<<<<< HEAD
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { Link } from "react-router-dom";
+=======
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+>>>>>>> e7a98688cce3752b8f71960a2677d9f6be2da57d
 import { useDrawerMenuStyles } from "./styles";
 import { useAppDispatch } from "../../store/hooks";
 import { push } from "connected-react-router";
@@ -41,9 +45,12 @@ function DrawerMenu({ userData, onClickLogout }: IDrawerMenu) {
   const onClickLogin = useCallback(() => {
     dispatch(push("/login"));
   }, [dispatch]);
+<<<<<<< HEAD
   const onClickMyHabbit = useCallback(() => {
     dispatch(push("/myHabbit"));
   }, [dispatch]);
+=======
+>>>>>>> e7a98688cce3752b8f71960a2677d9f6be2da57d
 
   const menuItemList = (
     <div
@@ -53,6 +60,7 @@ function DrawerMenu({ userData, onClickLogout }: IDrawerMenu) {
     >
       <List>
         {userData ? (
+<<<<<<< HEAD
           <div>
             <ListItem button key="myHabbit" onClick={onClickMyHabbit}>
               <ListItemIcon>
@@ -72,6 +80,18 @@ function DrawerMenu({ userData, onClickLogout }: IDrawerMenu) {
           <ListItem button key="login" onClick={onClickLogin}>
             <ListItemIcon>
               <GitHubIcon color="primary" />
+=======
+          <ListItem button key="logout" onClick={onClickLogout}>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
+          </ListItem>
+        ) : (
+          <ListItem button key="login" onClick={onClickLogin}>
+            <ListItemIcon>
+              <GitHubIcon />
+>>>>>>> e7a98688cce3752b8f71960a2677d9f6be2da57d
             </ListItemIcon>
             <ListItemText primary="Login" />
           </ListItem>

@@ -4,7 +4,10 @@ import {
   Hidden,
   Toolbar,
   IconButton,
+<<<<<<< HEAD
   Button,
+=======
+>>>>>>> e7a98688cce3752b8f71960a2677d9f6be2da57d
 } from "@material-ui/core";
 
 import React, { useCallback } from "react";
@@ -25,9 +28,12 @@ function MainNavbar() {
     dispatch(logoutUser());
     dispatch(push("/"));
   }, [dispatch]);
+<<<<<<< HEAD
   const onClickMyHabbit = useCallback(() => {
     dispatch(push("/myHabbit"));
   }, [dispatch]);
+=======
+>>>>>>> e7a98688cce3752b8f71960a2677d9f6be2da57d
 
   return (
     <>
@@ -38,6 +44,7 @@ function MainNavbar() {
           </Typography>
           <Hidden smDown>
             {userData ? (
+<<<<<<< HEAD
               <div>
                 <Button color="primary">
                   <Link to="/myHabbit">My Habbit</Link>
@@ -52,6 +59,15 @@ function MainNavbar() {
                   <GitHubIcon color="primary" />
                 </Link>
               </IconButton>
+=======
+              <IconButton onClick={onClickLogout}>
+                <ExitToAppIcon />
+              </IconButton>
+            ) : (
+              <Link to="/login">
+                <GitHubIcon />
+              </Link>
+>>>>>>> e7a98688cce3752b8f71960a2677d9f6be2da57d
             )}
           </Hidden>
           <Hidden mdUp>
