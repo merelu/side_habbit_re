@@ -9,9 +9,6 @@ const habbitSchema = new Schema(
     category: {
       type: Number,
     },
-    expired: {
-      type: Boolean,
-    },
     expiredDate: {
       type: Date,
     },
