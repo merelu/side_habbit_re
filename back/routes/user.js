@@ -7,15 +7,21 @@ const { User } = require("../models/User");
 const router = express.Router();
 
 router.get("/auth", (req, res, next) => {
-  console.log(req.user);
-  return res.json(req.user || false);
+  if (req.user) {
+    console.log(req.user);
+    return res.status(200).json({ success: true, user: req.user });
+  } else {
+    return res
+      .status(401)
+      .json({ errorMessage: "인증되지 않은 사용자 입니다. 로그인 해주세요" });
+  }
 });
 
 router.post("/register", isNotLoggedIn, async (req, res, next) => {
   try {
     const exUser = await User.findOne({ email: req.body.email });
     if (exUser) {
-      res.status(403).send("이미 사용 중인 이메일 입니다.");
+      res.status(403).json({ errorMessage: "이미 사용 중인 이메일 입니다." });
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
@@ -27,7 +33,7 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
 
     user.save();
 
-    res.status(201).json("ok");
+    res.status(201).json({ success: true });
   } catch (error) {
     console.error(error);
     return next(error);
@@ -41,21 +47,22 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
       return next(err);
     }
     if (info) {
-      return res.status(401).send(info.reason);
+      return res.status(401).json({
+        errorMessage: info.reason,
+      });
     }
     return req.login(user, async (loginErr) => {
       if (loginErr) {
         console.error(loginErr);
         return next(loginErr);
       }
-      return res
-        .status(200)
-        .json(
-          await User.findOne(
-            { _id: user._id },
-            { name: 1, email: 1, role: 1, image: 1 }
-          )
-        );
+      return res.status(200).json({
+        success: true,
+        user: await User.findOne(
+          { _id: user._id },
+          { name: 1, email: 1, role: 1, image: 1 }
+        ),
+      });
     });
   })(req, res, next);
 });
