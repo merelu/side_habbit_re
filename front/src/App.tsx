@@ -2,6 +2,7 @@ import { Container } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import React from "react";
 import { Route, Switch } from "react-router";
+import CustomSnackbar from "./components/CustomSnackbar";
 import MainNavbar from "./components/Navbar";
 import GlobalStyles from "./GlobalStyles";
 import Auth from "./hocs/Auth";
@@ -31,6 +32,7 @@ function App() {
           <Route path="/myHabbit" component={Auth(MyHabbitPage, true)} />
         </Switch>
       </Container>
+      <CustomSnackbar />
     </ThemeProvider>
   );
 }
