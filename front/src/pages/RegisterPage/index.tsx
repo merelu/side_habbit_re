@@ -9,6 +9,8 @@ import { useRegisterPageStyles } from "./styles";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { push } from "connected-react-router";
+import { registerUser } from "../../_actions/user_actions";
+import { occur, occurError } from "../../_reducers/alertSlice";
 
 const registerSchema = Yup.object().shape({
   email: Yup.string().email("Email is invalid").required("Email is required"),
@@ -24,22 +26,27 @@ const registerSchema = Yup.object().shape({
 function RegisterPage() {
   const dispatch = useAppDispatch();
   const classes = useRegisterPageStyles();
-  const [registerError, setRegisterError] = useState(false);
 
   return (
     <Formik
       initialValues={{ email: "", name: "", password: "", confirmPassword: "" }}
       validationSchema={registerSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        axios
-          .post("/api/users/register", values, { withCredentials: true })
-          .then((response) => {
-            console.log(response.data);
-            dispatch(push("/login"));
+      onSubmit={async (values, { setSubmitting }) => {
+        const resultAction = await dispatch(
+          registerUser({
+            email: values.email,
+            name: values.name,
+            password: values.password,
           })
-          .catch((error) => {
-            setRegisterError(error.response?.data?.statusCode === 401);
-          });
+        );
+        if (registerUser.fulfilled.match(resultAction)) {
+          dispatch(push("/login"));
+          dispatch(occur("회원가입 성공!"));
+        } else {
+          if (resultAction.payload) {
+            dispatch(occurError(resultAction.payload.errorMessage));
+          }
+        }
         setSubmitting(false);
       }}
     >
@@ -50,13 +57,6 @@ function RegisterPage() {
             <Typography variant="h4" color="primary" align="center">
               Register
             </Typography>
-            <Box className={classes.errorMessageBox}>
-              {registerError && (
-                <Typography variant="h6" align="left" color="secondary">
-                  이미 가입된 이메일 입니다.
-                </Typography>
-              )}
-            </Box>
             <Divider className={classes.divider} />
             <Box className={classes.box} marginBottom={3}>
               <Field

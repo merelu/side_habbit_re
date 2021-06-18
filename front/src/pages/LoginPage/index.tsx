@@ -2,7 +2,6 @@ import React, { useCallback, useState } from "react";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
-import axios from "axios";
 import {
   Box,
   Button,
@@ -15,6 +14,8 @@ import { useLoginPageStyles } from "./styles";
 import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { push } from "connected-react-router";
+import { loginUser } from "../../_actions/user_actions";
+import { occur, occurError } from "../../_reducers/alertSlice";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email("Email is invalid").required("Email is required"),
@@ -28,7 +29,6 @@ function LoginPage() {
   const classes = useLoginPageStyles();
   const rememberMeChecked = localStorage.getItem("rememberMe") ? true : false;
   const [rememberMe, setRememberMe] = useState(rememberMeChecked);
-  const [loginError, setLoginError] = useState(false);
   const handleRememberMe = useCallback(() => {
     setRememberMe((prev) => !prev);
   }, []);
@@ -36,16 +36,16 @@ function LoginPage() {
     <Formik
       initialValues={{ email: "", password: "" }}
       validationSchema={loginSchema}
-      onSubmit={(values, { setSubmitting }) => {
-        axios
-          .post("/api/users/login", values, { withCredentials: true })
-          .then((response) => {
-            console.log(response.data);
-            dispatch(push("/"));
-          })
-          .catch((error) => {
-            setLoginError(error.response?.data?.statusCode === 401);
-          });
+      onSubmit={async (values, { setSubmitting }) => {
+        const resultAction = await dispatch(loginUser(values));
+        if (loginUser.fulfilled.match(resultAction)) {
+          dispatch(push("/"));
+          dispatch(occur("로그인 성공!"));
+        } else {
+          if (resultAction.payload) {
+            dispatch(occurError(resultAction.payload.errorMessage));
+          }
+        }
         setSubmitting(false);
       }}
     >
@@ -56,13 +56,6 @@ function LoginPage() {
             <Typography variant="h4" color="primary" align="center">
               Login
             </Typography>
-            <Box className={classes.errorMessageBox}>
-              {loginError && (
-                <Typography variant="h6" align="left" color="secondary">
-                  이메일이나 비밀번호가 일치 하지 않습니다.
-                </Typography>
-              )}
-            </Box>
             <Divider className={classes.divider} />
             <Box className={classes.box} marginBottom={3}>
               <Field
