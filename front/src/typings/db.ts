@@ -8,3 +8,7 @@ export interface IUser {
   role?: number;
   image?: string;
 }
+
+export interface IValidationErrors {
+  errorMessage: string;
+}
