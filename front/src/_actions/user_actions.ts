@@ -1,36 +1,86 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
+import { IUser, IValidationErrors } from "../typings/db";
 
-export const loginUser = createAsyncThunk(
-  "users/login",
-  async (body, thunkApi) => {
-    try {
-      const response = await axios.post("/api/users/login", body);
-      return await response.data;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err.response.data);
-    }
+interface ILoginBody {
+  email: string;
+  password: string;
+}
+interface IRegisterBody {
+  email: string;
+  name: string;
+  password: string;
+}
+
+interface IUserResponse {
+  success: boolean;
+  user: IUser;
+}
+interface IRegisterResponse {
+  success: boolean;
+}
+
+export const loginUser = createAsyncThunk<
+  IUserResponse,
+  ILoginBody,
+  {
+    rejectValue: IValidationErrors;
   }
-);
+>("users/login", async (body, { rejectWithValue }) => {
+  try {
+    const response = await axios.post<IUserResponse>("/api/users/login", body, {
+      withCredentials: true,
+    });
+    return await response.data;
+  } catch (err) {
+    let error: AxiosError<IValidationErrors> = err;
+    if (!error.response) {
+      throw err;
+    }
+
+    return rejectWithValue(error.response.data);
+  }
+});
 
 export const logoutUser = createAsyncThunk("users/logout", async () => {
   const response = await axios.get("/api/users/logout");
   return await response.data;
 });
 
-export const registerUser = createAsyncThunk(
-  "users/register",
-  async (body, thunkApi) => {
-    try {
-      const response = await axios.post("/api/users/register", body);
-      return await response.data;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err.response.data);
-    }
+export const registerUser = createAsyncThunk<
+  IRegisterResponse,
+  IRegisterBody,
+  { rejectValue: IValidationErrors }
+>("users/register", async (body, { rejectWithValue }) => {
+  try {
+    const response = await axios.post<IRegisterResponse>(
+      "/api/users/register",
+      body,
+      {
+        withCredentials: true,
+      }
+    );
+    return await response.data;
+  } catch (err) {
+    let error: AxiosError<IValidationErrors> = err;
+    if (!error.response) throw err;
+    return rejectWithValue(error.response.data);
   }
-);
+});
 
-export const authUser = createAsyncThunk("users/auth", async () => {
-  const response = await axios.get("/api/users/auth");
-  return (await response.data) ? response.data : null;
+export const authUser = createAsyncThunk<
+  IUserResponse,
+  void,
+  { rejectValue: IValidationErrors }
+>("users/auth", async (value, { rejectWithValue }) => {
+  try {
+    const response = await axios.get<IUserResponse>("/api/users/auth");
+    return await response.data;
+  } catch (err) {
+    let error: AxiosError<IValidationErrors> = err;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
+  }
 });

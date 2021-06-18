@@ -17,13 +17,14 @@ const initialState: IUserReducerState = {
   userData: null,
 };
 
-export const userSlice = createSlice({
+const userSlice = createSlice({
   name: "users",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loginUser.fulfilled, (state, action) => {
       state.isLoading = false;
+      state.userData = action.payload.user;
     });
     builder.addCase(registerUser.fulfilled, (state, action) => {
       state.isLoading = false;
@@ -34,7 +35,7 @@ export const userSlice = createSlice({
     });
     builder.addCase(authUser.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.userData = action.payload;
+      state.userData = action.payload.user;
     });
     builder.addMatcher(
       (action) => {
@@ -54,3 +55,5 @@ export const userSlice = createSlice({
     );
   },
 });
+
+export default userSlice.reducer;
