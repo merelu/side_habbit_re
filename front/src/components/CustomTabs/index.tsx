@@ -35,7 +35,7 @@ export default function CustomTabs() {
         textColor="primary"
       >
         <Tab icon={<AllInboxIcon />} label="All"></Tab>
-        <Tab icon={<FitnessCenterIcon />} label="Exercise"></Tab>
+        <Tab icon={<FitnessCenterIcon />} label="Fitness"></Tab>
         <Tab icon={<MenuBookIcon />} label="Study"></Tab>
         <Tab icon={<SportsEsportsIcon />} label="Hobby"></Tab>
       </Tabs>
