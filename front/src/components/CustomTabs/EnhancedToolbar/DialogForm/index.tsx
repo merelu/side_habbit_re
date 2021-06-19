@@ -8,28 +8,27 @@ import {
   DialogContentText,
   DialogActions,
   FormControl,
-  ListItemIcon,
   FormLabel,
   FormGroup,
   InputLabel,
   MenuItem,
-  Typography,
   Grid,
 } from "@material-ui/core";
-import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
-import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import { DatePicker } from "formik-material-ui-pickers";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import { Formik, Form, Field, FieldArray } from "formik";
 import dayjs from "dayjs";
 import DateFnsUtils from "@date-io/dayjs";
 import { Select, TextField, CheckboxWithLabel } from "formik-material-ui";
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { createHabbit } from "../../../../_actions/habbit_actions";
+import { occur, occurError } from "../../../../_reducers/alertSlice";
 
 interface DialogFormProps {
   open: boolean;
   handleClose: () => void;
 }
+
 const initialValues = {
   title: "",
   category: 0,
@@ -47,6 +46,9 @@ const validationSchema = Yup.object().shape({
 });
 
 export default function DialogForm({ open, handleClose }: DialogFormProps) {
+  const dispatch = useAppDispatch();
+  const { userData } = useAppSelector((state) => state.user);
+
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Add Habbit</DialogTitle>
@@ -58,8 +60,27 @@ export default function DialogForm({ open, handleClose }: DialogFormProps) {
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting }) => {
-              console.log(values);
+            onSubmit={async (values, { setSubmitting }) => {
+              if (!userData) {
+                dispatch(occur("로그인 정보가 없습니다."));
+                return;
+              }
+              const resultAction = await dispatch(
+                createHabbit({
+                  ...values,
+                  writer: userData._id as string,
+                  expiredDate: values.expiredDate.toDate(),
+                })
+              );
+              if (createHabbit.fulfilled.match(resultAction)) {
+                dispatch(occur("습관 추가 성공!"));
+                handleClose();
+              } else {
+                if (resultAction.payload) {
+                  dispatch(occurError(resultAction.payload.errorMessage));
+                }
+              }
+              setSubmitting(false);
             }}
           >
             {({ values, touched, errors, submitForm, isSubmitting }) => (
