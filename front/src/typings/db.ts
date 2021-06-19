@@ -1,14 +1,23 @@
 export interface IUser {
-  _id?: string;
+  _id: string;
   isAuth?: boolean;
   isAdmin?: boolean;
-  name?: string;
-  email?: string;
+  name: string;
+  email: string;
   lastname?: string;
   role?: number;
-  image?: string;
+  image: string;
 }
 
 export interface IValidationErrors {
   errorMessage: string;
+}
+
+export interface IHabbit {
+  _id: string;
+  title?: string;
+  category: number;
+  expiredDate: Date;
+  writer: string;
+  schedule: boolean[];
 }
