@@ -8,7 +8,6 @@ const router = express.Router();
 
 router.get("/auth", (req, res, next) => {
   if (req.user) {
-    console.log(req.user);
     return res.status(200).json({ success: true, user: req.user });
   } else {
     return res
