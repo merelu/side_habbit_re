@@ -42,7 +42,7 @@ function MainNavbar() {
                 <Button color="primary">
                   <Link to="/myHabbit">My Habbit</Link>
                 </Button>
-                <IconButton onClick={onClickMyHabbit}>
+                <IconButton onClick={onClickLogout}>
                   <ExitToAppIcon color="primary" />
                 </IconButton>
               </div>
