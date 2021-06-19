@@ -27,7 +27,6 @@ const alertSlice = createSlice({
     alertClose(state) {
       state.open = false;
       state.error = false;
-      state.message = "";
     },
   },
 });
