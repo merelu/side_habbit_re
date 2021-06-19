@@ -7,6 +7,7 @@ import {
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import { createBrowserHistory } from "history";
 import alertSlice from "../_reducers/alertSlice";
+import habbitSlice from "../_reducers/habbitSlice";
 import userSlice from "../_reducers/userSlice";
 
 export const history = createBrowserHistory();
@@ -14,6 +15,7 @@ export const history = createBrowserHistory();
 const reducer = combineReducers({
   router: connectRouter(history),
   user: userSlice,
+  habbit: habbitSlice,
   alert: alertSlice,
 });
 
