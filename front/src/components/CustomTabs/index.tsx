@@ -6,23 +6,15 @@ import MenuBookIcon from "@material-ui/icons/MenuBook";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import Tasks from "./Tasks";
 import EnhancedToolbar from "./EnhancedToolbar";
-import { data as initialData, IData } from "./Tasks/data";
 import { useCustomTapsStyles } from "./styles";
 
 export default function CustomTabs() {
   const classes = useCustomTapsStyles();
   const [value, setValue] = useState(0);
-  const [data, setData] = useState<IData[]>([]);
   const handleChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-  useEffect(() => {
-    if (value === 0) {
-      setData(initialData);
-    } else {
-      setData(initialData.filter((item) => item.type === value - 1));
-    }
-  }, [value]);
+
   return (
     <Paper className={classes.paper}>
       <EnhancedToolbar />
@@ -40,7 +32,7 @@ export default function CustomTabs() {
         <Tab icon={<SportsEsportsIcon />} label="Hobby"></Tab>
       </Tabs>
       <Divider />
-      <Tasks data={data} />
+      <Tasks />
     </Paper>
   );
 }

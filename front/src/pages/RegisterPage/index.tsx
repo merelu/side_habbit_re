@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
-import axios from "axios";
-import gravatar from "gravatar";
 import { Box, Button, Divider, Typography } from "@material-ui/core";
 import { useRegisterPageStyles } from "./styles";
-import { Link } from "react-router-dom";
 import { useAppDispatch } from "../../store/hooks";
 import { push } from "connected-react-router";
 import { registerUser } from "../../_actions/user_actions";

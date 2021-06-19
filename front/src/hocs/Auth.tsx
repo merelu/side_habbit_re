@@ -1,4 +1,4 @@
-import { goBack, push } from "connected-react-router";
+import { push } from "connected-react-router";
 import React, { useEffect } from "react";
 import { useAppDispatch } from "../store/hooks";
 import { authUser } from "../_actions/user_actions";
