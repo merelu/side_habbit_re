@@ -3,26 +3,25 @@ import {
   TableBody,
   TableHead,
   TableRow,
-  TableCell,
-  TableContainer,
-  Paper,
   Checkbox,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { IData } from "./data";
 import { useTasksStyles, StyledTableCell } from "./styles";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { getTodayHabbits } from "../../../_actions/habbit_actions";
+import { occur, occurError } from "../../../_reducers/alertSlice";
 
-interface TasksProps {
-  data: IData[];
-}
-function Tasks({ data }: TasksProps) {
+function Tasks() {
+  const dispatch = useAppDispatch();
   const classes = useTasksStyles();
   const [selected, setSelected] = useState<string[]>([]);
+  const { habbits } = useAppSelector((state) => state.habbit);
+  const { userData } = useAppSelector((state) => state.user);
 
   const handleSelectAllClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      const newSelecteds = data.map((n) => n._id);
+      const newSelecteds = habbits.map((n) => n._id);
       setSelected(newSelecteds);
       return;
     }
@@ -49,8 +48,50 @@ function Tasks({ data }: TasksProps) {
     setSelected(newSelected);
   };
 
+  const parsingNextDate = (arr: boolean[], dayOfWeek: number): string => {
+    let i = dayOfWeek;
+    let count = 0;
+    if (dayOfWeek + 1 === arr.length) {
+      i = 0;
+    }
+
+    for (i; i < arr.length; i++) {
+      count++;
+      if (arr[i] === true) {
+        break;
+      }
+      if (i === arr.length) {
+        i = -1;
+      }
+    }
+
+    return dayjs().add(count, "day").format("YYYY-MM-DD");
+  };
+
   const isSelected = (name: string) => selected.indexOf(name) !== -1;
-  if (data) {
+
+  useEffect(() => {
+    const getHabbits = async () => {
+      const resultAction = await dispatch(
+        getTodayHabbits({
+          userId: userData?._id as string,
+          date: dayjs().format("YYYY-MM-DD"),
+        })
+      );
+      if (getTodayHabbits.fulfilled.match(resultAction)) {
+        dispatch(occur("금일 습관을 불러오는데 성공했습니다."));
+      } else {
+        if (resultAction.payload) {
+          dispatch(occurError(resultAction.payload.errorMessage));
+        }
+      }
+    };
+    if (userData) {
+      getHabbits();
+    }
+  }, [dispatch, userData]);
+
+  if (habbits) {
     return (
       <Table className={classes.table}>
         <TableHead>
@@ -59,26 +100,27 @@ function Tasks({ data }: TasksProps) {
               <Checkbox
                 color="primary"
                 indeterminate={
-                  selected.length > 0 && selected.length < data.length
+                  selected.length > 0 && selected.length < habbits.length
                 }
-                checked={data.length > 0 && selected.length === data.length}
+                checked={
+                  habbits.length > 0 && selected.length === habbits.length
+                }
                 onChange={handleSelectAllClick}
               />
             </StyledTableCell>
             <StyledTableCell>Title</StyledTableCell>
-            <StyledTableCell align="right">Count</StyledTableCell>
             <StyledTableCell align="right">NextDate</StyledTableCell>
             <StyledTableCell align="right">ExpiredDate</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row) => {
-            const isItemSelected = isSelected(row._id);
+          {habbits.map((habbit) => {
+            const isItemSelected = isSelected(habbit._id);
             return (
               <TableRow
-                key={row._id}
+                key={habbit._id}
                 hover
-                onClick={(e) => handleClick(e, row._id)}
+                onClick={(e) => handleClick(e, habbit._id)}
                 role="checkbox"
                 aria-checked={isItemSelected}
                 tabIndex={-1}
@@ -92,14 +134,13 @@ function Tasks({ data }: TasksProps) {
                   scope="row"
                   className={classes.wideColumn}
                 >
-                  {row.title}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.count}</StyledTableCell>
-                <StyledTableCell align="right">
-                  {dayjs(row.nextDate).format("YY-MM-DD")}
+                  {habbit.title}
                 </StyledTableCell>
                 <StyledTableCell align="right">
-                  {dayjs(row.expiredDate).format("YY-MM-DD")}
+                  {parsingNextDate(habbit.schedule, dayjs().day())}
+                </StyledTableCell>
+                <StyledTableCell align="right">
+                  {dayjs(habbit.expiredDate).format("YY-MM-DD")}
                 </StyledTableCell>
               </TableRow>
             );
