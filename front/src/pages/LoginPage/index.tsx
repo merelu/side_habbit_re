@@ -46,7 +46,6 @@ function LoginPage() {
             dispatch(occurError(resultAction.payload.errorMessage));
           }
         }
-        setSubmitting(false);
       }}
     >
       {(props) => {

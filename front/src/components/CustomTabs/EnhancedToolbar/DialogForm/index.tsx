@@ -80,7 +80,6 @@ export default function DialogForm({ open, handleClose }: DialogFormProps) {
                   dispatch(occurError(resultAction.payload.errorMessage));
                 }
               }
-              setSubmitting(false);
             }}
           >
             {({ values, touched, errors, submitForm, isSubmitting }) => (
