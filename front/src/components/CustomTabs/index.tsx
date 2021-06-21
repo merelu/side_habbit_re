@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Paper, Tabs, Tab, Divider } from "@material-ui/core";
 import AllInboxIcon from "@material-ui/icons/AllInbox";
 import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
@@ -11,13 +11,17 @@ import { useCustomTapsStyles } from "./styles";
 export default function CustomTabs() {
   const classes = useCustomTapsStyles();
   const [value, setValue] = useState(0);
+  const [commitStatus, setCommitStatus] = useState(false);
   const handleChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
+  const handleCommitStatus = useCallback((status: boolean) => {
+    setCommitStatus(status);
+  }, []);
 
   return (
     <Paper className={classes.paper}>
-      <EnhancedToolbar />
+      <EnhancedToolbar commitStatus={commitStatus} />
       <Divider />
       <Tabs
         value={value}
@@ -32,7 +36,7 @@ export default function CustomTabs() {
         <Tab icon={<SportsEsportsIcon />} label="Hobby"></Tab>
       </Tabs>
       <Divider />
-      <Tasks />
+      <Tasks value={value} handleCommitStatus={handleCommitStatus} />
     </Paper>
   );
 }
