@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IHabbit } from "../typings/db";
 import { createHabbit, getTodayHabbits } from "../_actions/habbit_actions";
 
@@ -15,7 +15,21 @@ const initialState: IHabbitReducerState = {
 const habbitSlice = createSlice({
   name: "habbit",
   initialState,
-  reducers: {},
+  reducers: {
+    handleCheckedState(state, action: PayloadAction<string>) {
+      state.habbits = state.habbits.map((habbit) =>
+        habbit._id === action.payload
+          ? { ...habbit, checked: !habbit.checked }
+          : habbit
+      );
+    },
+    allChecked(state) {
+      state.habbits = state.habbits.map((habbit) => ({
+        ...habbit,
+        checked: !habbit.checked,
+      }));
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(createHabbit.fulfilled, (state, action) => {
       state.isLoading = false;
@@ -23,7 +37,10 @@ const habbitSlice = createSlice({
     });
     builder.addCase(getTodayHabbits.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.habbits = action.payload.habbits;
+      state.habbits = action.payload.habbits.map((habbit) => ({
+        ...habbit,
+        checked: false,
+      }));
     });
     builder.addMatcher(
       (action) => {
@@ -44,4 +61,5 @@ const habbitSlice = createSlice({
   },
 });
 
+export const { handleCheckedState, allChecked } = habbitSlice.actions;
 export default habbitSlice.reducer;
