@@ -16,7 +16,9 @@ const habbitSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    schedule: [Boolean],
+    schedule: {
+      type: [Boolean],
+    },
   },
   { timestamps: true }
 );
