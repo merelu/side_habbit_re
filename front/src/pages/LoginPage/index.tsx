@@ -32,13 +32,23 @@ function LoginPage() {
   const handleRememberMe = useCallback(() => {
     setRememberMe((prev) => !prev);
   }, []);
+
+  const initialEmail = localStorage.getItem("rememberMe")
+    ? (localStorage.getItem("rememberMe") as string)
+    : "";
+
   return (
     <Formik
-      initialValues={{ email: "", password: "" }}
+      initialValues={{ email: initialEmail, password: "" }}
       validationSchema={loginSchema}
       onSubmit={async (values, { setSubmitting }) => {
         const resultAction = await dispatch(loginUser(values));
         if (loginUser.fulfilled.match(resultAction)) {
+          if (rememberMe === true) {
+            localStorage.setItem("rememberMe", values.email);
+          } else {
+            localStorage.removeItem("rememberMe");
+          }
           dispatch(push("/"));
           dispatch(occur("로그인 성공!"));
         } else {
