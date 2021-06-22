@@ -19,7 +19,7 @@ interface ITasksProps {
   value: number;
   handleCommitStatus: (status: boolean) => void;
 }
-function Tasks({ value }: ITasksProps) {
+function Tasks({ value, handleCommitStatus }: ITasksProps) {
   const dispatch = useAppDispatch();
   const classes = useTasksStyles();
 
@@ -28,10 +28,18 @@ function Tasks({ value }: ITasksProps) {
   const { userData } = useAppSelector((state) => state.user);
 
   const handleSelectAllClick = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.checked) {
-      dispatch(handleAllChecked(true));
+    if (value === 0) {
+      if (e.target.checked) {
+        dispatch(handleAllChecked({ checked: true }));
+      } else {
+        dispatch(handleAllChecked({ checked: false }));
+      }
     } else {
-      dispatch(handleAllChecked(false));
+      if (e.target.checked) {
+        dispatch(handleAllChecked({ checked: true, category: value - 1 }));
+      } else {
+        dispatch(handleAllChecked({ checked: false, category: value - 1 }));
+      }
     }
   };
 

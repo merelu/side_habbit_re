@@ -23,11 +23,25 @@ const habbitSlice = createSlice({
           : habbit
       );
     },
-    handleAllChecked(state, action: PayloadAction<boolean>) {
-      state.habbits = state.habbits.map((habbit) => ({
-        ...habbit,
-        checked: action.payload,
-      }));
+    handleAllChecked(
+      state,
+      action: PayloadAction<{ checked: boolean; category?: number }>
+    ) {
+      state.habbits = state.habbits.map((habbit) => {
+        if (action.payload.category !== undefined) {
+          return habbit.category === action.payload.category
+            ? {
+                ...habbit,
+                checked: action.payload.checked,
+              }
+            : habbit;
+        } else {
+          return {
+            ...habbit,
+            checked: action.payload.checked,
+          };
+        }
+      });
     },
   },
   extraReducers: (builder) => {
