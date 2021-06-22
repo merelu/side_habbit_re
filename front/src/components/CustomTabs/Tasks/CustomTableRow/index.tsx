@@ -59,7 +59,9 @@ function CustomTableRow({ habbit, isItemSelected }: ICustomTableRowProps) {
       >
         {habbit.title}
       </StyledTableCell>
-      <StyledTableCell align="right">{nextDate}</StyledTableCell>
+      <StyledTableCell align="right">
+        {dayjs(nextDate) < dayjs(habbit.expiredDate) ? nextDate : "당일"}
+      </StyledTableCell>
       <StyledTableCell align="right">
         {dayjs(habbit.expiredDate).format("YY-MM-DD")}
       </StyledTableCell>
