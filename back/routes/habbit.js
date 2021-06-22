@@ -28,7 +28,6 @@ router.get(
     const habbits = await Habbit.find({
       writer: req.params.userId,
       expiredDate: { $gte: dayjs(req.params.date) },
-      createdAt: { $gte: dayjs(req.params.date) },
     }).exec((err, values) => {
       if (err)
         return res
