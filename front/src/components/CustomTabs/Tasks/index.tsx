@@ -5,47 +5,40 @@ import {
   TableRow,
   Checkbox,
 } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { useTasksStyles, StyledTableCell } from "./styles";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getTodayHabbits } from "../../../_actions/habbit_actions";
 import { occur, occurError } from "../../../_reducers/alertSlice";
+import { IHabbit } from "../../../typings/db";
+import {
+  handleAllChecked,
+  handleCheckedState,
+} from "../../../_reducers/habbitSlice";
 
-function Tasks() {
+interface ITasksProps {
+  value: number;
+  handleCommitStatus: (status: boolean) => void;
+}
+function Tasks({ value }: ITasksProps) {
   const dispatch = useAppDispatch();
   const classes = useTasksStyles();
-  const [selected, setSelected] = useState<string[]>([]);
+
+  const [generateHabbitList, setGenerateHabbitList] = useState<IHabbit[]>([]);
   const { habbits } = useAppSelector((state) => state.habbit);
   const { userData } = useAppSelector((state) => state.user);
 
   const handleSelectAllClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      const newSelecteds = habbits.map((n) => n._id);
-      setSelected(newSelecteds);
-      return;
+      dispatch(handleAllChecked());
+    } else {
+      dispatch(handleAllChecked());
     }
-    setSelected([]);
   };
 
   const handleClick = (e: React.MouseEvent<unknown>, _id: string) => {
-    const selectedIndex = selected.indexOf(_id);
-    let newSelected: string[] = [];
-
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, _id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-
-    setSelected(newSelected);
+    dispatch(handleCheckedState(_id));
   };
 
   const parsingNextDate = (arr: boolean[], dayOfWeek: number): string => {
@@ -68,7 +61,30 @@ function Tasks() {
     return dayjs().add(count, "day").format("YYYY-MM-DD");
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isIndeterminate = useCallback(() => {
+    const selected = generateHabbitList.filter(
+      (item) => item.checked === true
+    ).length;
+
+    return selected > 0 && selected < generateHabbitList.length;
+  }, [generateHabbitList]);
+
+  const isAllItemChecked = useCallback(() => {
+    const selected = generateHabbitList.filter(
+      (item) => item.checked === true
+    ).length;
+    return (
+      generateHabbitList.length > 0 && selected === generateHabbitList.length
+    );
+  }, [generateHabbitList]);
+
+  const isSelected = useCallback(
+    (_id: string) => {
+      const index = generateHabbitList.findIndex((item) => item._id === _id);
+      return generateHabbitList[index].checked;
+    },
+    [generateHabbitList]
+  );
 
   useEffect(() => {
     const getHabbits = async () => {
@@ -91,7 +107,19 @@ function Tasks() {
     }
   }, [dispatch, userData]);
 
-  if (habbits) {
+  useEffect(() => {
+    if (habbits) {
+      if (value === 0) {
+        setGenerateHabbitList(habbits);
+      } else {
+        setGenerateHabbitList(
+          habbits.filter((habbit) => habbit.category === value - 1)
+        );
+      }
+    }
+  }, [habbits, value]);
+
+  if (generateHabbitList) {
     return (
       <Table className={classes.table}>
         <TableHead>
@@ -99,12 +127,8 @@ function Tasks() {
             <StyledTableCell padding="checkbox">
               <Checkbox
                 color="primary"
-                indeterminate={
-                  selected.length > 0 && selected.length < habbits.length
-                }
-                checked={
-                  habbits.length > 0 && selected.length === habbits.length
-                }
+                indeterminate={isIndeterminate()}
+                checked={isAllItemChecked()}
                 onChange={handleSelectAllClick}
               />
             </StyledTableCell>
@@ -114,7 +138,7 @@ function Tasks() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {habbits.map((habbit) => {
+          {generateHabbitList.map((habbit) => {
             const isItemSelected = isSelected(habbit._id);
             return (
               <TableRow
@@ -123,7 +147,6 @@ function Tasks() {
                 onClick={(e) => handleClick(e, habbit._id)}
                 role="checkbox"
                 aria-checked={isItemSelected}
-                tabIndex={-1}
                 selected={isItemSelected}
               >
                 <StyledTableCell padding="checkbox">
