@@ -23,7 +23,7 @@ const habbitSlice = createSlice({
           : habbit
       );
     },
-    allChecked(state) {
+    handleAllChecked(state) {
       state.habbits = state.habbits.map((habbit) => ({
         ...habbit,
         checked: !habbit.checked,
@@ -33,7 +33,10 @@ const habbitSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(createHabbit.fulfilled, (state, action) => {
       state.isLoading = false;
-      state.habbits.concat(action.payload.habbit);
+      state.habbits = state.habbits.concat({
+        ...action.payload.habbit,
+        checked: false,
+      });
     });
     builder.addCase(getTodayHabbits.fulfilled, (state, action) => {
       state.isLoading = false;
@@ -61,5 +64,5 @@ const habbitSlice = createSlice({
   },
 });
 
-export const { handleCheckedState, allChecked } = habbitSlice.actions;
+export const { handleCheckedState, handleAllChecked } = habbitSlice.actions;
 export default habbitSlice.reducer;
