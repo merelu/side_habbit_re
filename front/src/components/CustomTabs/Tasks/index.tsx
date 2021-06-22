@@ -12,10 +12,8 @@ import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { getTodayHabbits } from "../../../_actions/habbit_actions";
 import { occur, occurError } from "../../../_reducers/alertSlice";
 import { IHabbit } from "../../../typings/db";
-import {
-  handleAllChecked,
-  handleCheckedState,
-} from "../../../_reducers/habbitSlice";
+import { handleAllChecked } from "../../../_reducers/habbitSlice";
+import CustomTableRow from "./CustomTableRow";
 
 interface ITasksProps {
   value: number;
@@ -31,34 +29,10 @@ function Tasks({ value }: ITasksProps) {
 
   const handleSelectAllClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
-      dispatch(handleAllChecked());
+      dispatch(handleAllChecked(true));
     } else {
-      dispatch(handleAllChecked());
+      dispatch(handleAllChecked(false));
     }
-  };
-
-  const handleClick = (e: React.MouseEvent<unknown>, _id: string) => {
-    dispatch(handleCheckedState(_id));
-  };
-
-  const parsingNextDate = (arr: boolean[], dayOfWeek: number): string => {
-    let i = dayOfWeek;
-    let count = 0;
-    if (dayOfWeek + 1 === arr.length) {
-      i = 0;
-    }
-
-    for (i; i < arr.length; i++) {
-      count++;
-      if (arr[i] === true) {
-        break;
-      }
-      if (i === arr.length) {
-        i = -1;
-      }
-    }
-
-    return dayjs().add(count, "day").format("YYYY-MM-DD");
   };
 
   const isIndeterminate = useCallback(() => {
@@ -141,31 +115,11 @@ function Tasks({ value }: ITasksProps) {
           {generateHabbitList.map((habbit) => {
             const isItemSelected = isSelected(habbit._id);
             return (
-              <TableRow
+              <CustomTableRow
                 key={habbit._id}
-                hover
-                onClick={(e) => handleClick(e, habbit._id)}
-                role="checkbox"
-                aria-checked={isItemSelected}
-                selected={isItemSelected}
-              >
-                <StyledTableCell padding="checkbox">
-                  <Checkbox checked={isItemSelected} />
-                </StyledTableCell>
-                <StyledTableCell
-                  component="th"
-                  scope="row"
-                  className={classes.wideColumn}
-                >
-                  {habbit.title}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {parsingNextDate(habbit.schedule, dayjs().day())}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  {dayjs(habbit.expiredDate).format("YY-MM-DD")}
-                </StyledTableCell>
-              </TableRow>
+                habbit={habbit}
+                isItemSelected={isItemSelected}
+              />
             );
           })}
         </TableBody>

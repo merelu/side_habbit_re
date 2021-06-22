@@ -20,5 +20,5 @@ export interface IHabbit {
   expiredDate: Date;
   writer: string;
   schedule: boolean[];
-  checked?: boolean;
+  checked: boolean;
 }
