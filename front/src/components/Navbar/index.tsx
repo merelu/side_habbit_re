@@ -25,13 +25,10 @@ function MainNavbar() {
     dispatch(logoutUser());
     dispatch(push("/"));
   }, [dispatch]);
-  const onClickMyHabbit = useCallback(() => {
-    dispatch(push("/myHabbit"));
-  }, [dispatch]);
 
   return (
     <>
-      <AppBar position="sticky" color="transparent">
+      <AppBar position="sticky" color="inherit">
         <Toolbar className={classes.toobar}>
           <Typography variant="h6" color="primary">
             <Link to="/">Side_Habbit</Link>
