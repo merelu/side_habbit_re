@@ -23,10 +23,10 @@ const habbitSlice = createSlice({
           : habbit
       );
     },
-    handleAllChecked(state) {
+    handleAllChecked(state, action: PayloadAction<boolean>) {
       state.habbits = state.habbits.map((habbit) => ({
         ...habbit,
-        checked: !habbit.checked,
+        checked: action.payload,
       }));
     },
   },
