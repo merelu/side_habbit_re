@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Paper, Tabs, Tab, Divider } from "@material-ui/core";
 import AllInboxIcon from "@material-ui/icons/AllInbox";
 import FitnessCenterIcon from "@material-ui/icons/FitnessCenter";
