@@ -2,8 +2,9 @@ import React, { useCallback, useState } from "react";
 import { Toolbar, Typography, Tooltip, Button } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CheckIcon from "@material-ui/icons/Check";
-import { useToolbarStyles } from "./styles";
-import DialogForm from "./DialogForm";
+import { useCustomTapsStyles } from "@components/CustomTabs/styles";
+import AddHabbitModal from "./AddHabbitModal";
+import CommitModal from "./CommitModal";
 
 interface IEnhancedToolbarProps {
   commitStatus: boolean;
@@ -11,18 +12,20 @@ interface IEnhancedToolbarProps {
 export default function EnhancedToolbar({
   commitStatus,
 }: IEnhancedToolbarProps) {
-  const classes = useToolbarStyles();
-  const [open, setOpen] = useState(false);
+  const classes = useCustomTapsStyles();
+  const [addHabbitModalOpen, setAddHabbitModalOpen] = useState(false);
+  const [commitModalOpen, setCommitModalOpen] = useState(false);
 
-  const handleClickOpen = useCallback(() => {
-    setOpen(true);
+  const onClickAddHabbitModal = useCallback(() => {
+    setAddHabbitModalOpen(true);
   }, []);
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
+  const onClickCommitModal = useCallback(() => {
+    setCommitModalOpen(true);
   }, []);
-
-  const handleCommit = useCallback(() => {}, []);
+  const onCloseModal = useCallback(() => {
+    setAddHabbitModalOpen(false);
+    setCommitModalOpen(false);
+  }, []);
 
   return (
     <Toolbar className={classes.toolbar}>
@@ -34,7 +37,7 @@ export default function EnhancedToolbar({
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
-            onClick={handleClickOpen}
+            onClick={onClickAddHabbitModal}
           >
             Add Habbit
           </Button>
@@ -45,13 +48,14 @@ export default function EnhancedToolbar({
             variant="contained"
             color="primary"
             startIcon={<CheckIcon />}
-            onClick={handleCommit}
+            onClick={onClickCommitModal}
           >
             Commit
           </Button>
         </Tooltip>
       </div>
-      <DialogForm open={open} handleClose={handleClose} />
+      <AddHabbitModal open={addHabbitModalOpen} onCloseModal={onCloseModal} />
+      <CommitModal open={commitModalOpen} onCloseModal={onCloseModal} />
     </Toolbar>
   );
 }

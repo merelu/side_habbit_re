@@ -20,13 +20,13 @@ import { Formik, Form, Field, FieldArray } from "formik";
 import dayjs from "dayjs";
 import DateFnsUtils from "@date-io/dayjs";
 import { Select, TextField, CheckboxWithLabel } from "formik-material-ui";
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { createHabbit } from "../../../../_actions/habbit_actions";
-import { occur, occurError } from "../../../../_reducers/alertSlice";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { createHabbit } from "@_actions/habbit_actions";
+import { occur, occurError } from "@_reducers/alertSlice";
 
 interface DialogFormProps {
   open: boolean;
-  handleClose: () => void;
+  onCloseModal: () => void;
 }
 
 const initialValues = {
@@ -45,12 +45,15 @@ const validationSchema = Yup.object().shape({
     .min(1, "At least one must be checked"),
 });
 
-export default function DialogForm({ open, handleClose }: DialogFormProps) {
+export default function AddHabbitModal({
+  open,
+  onCloseModal,
+}: DialogFormProps) {
   const dispatch = useAppDispatch();
   const { userData } = useAppSelector((state) => state.user);
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={onCloseModal}>
       <DialogTitle>Add Habbit</DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -74,7 +77,7 @@ export default function DialogForm({ open, handleClose }: DialogFormProps) {
               );
               if (createHabbit.fulfilled.match(resultAction)) {
                 dispatch(occur("습관 추가 성공!"));
-                handleClose();
+                onCloseModal();
               } else {
                 if (resultAction.payload) {
                   dispatch(occurError(resultAction.payload.errorMessage));
