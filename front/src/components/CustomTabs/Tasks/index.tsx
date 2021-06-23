@@ -7,13 +7,16 @@ import {
 } from "@material-ui/core";
 import React, { useCallback, useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { useTasksStyles, StyledTableCell } from "./styles";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { getTodayHabbits } from "../../../_actions/habbit_actions";
-import { occur, occurError } from "../../../_reducers/alertSlice";
-import { IHabbit } from "../../../typings/db";
-import { handleAllChecked } from "../../../_reducers/habbitSlice";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { getTodayHabbits } from "@_actions/habbit_actions";
+import { occur, occurError } from "@_reducers/alertSlice";
+import { IHabbit } from "@typings/db";
+import { handleAllChecked } from "@_reducers/habbitSlice";
 import CustomTableRow from "./CustomTableRow";
+import {
+  useCustomTapsStyles,
+  StyledTableCell,
+} from "@components/CustomTabs/styles";
 
 interface ITasksProps {
   value: number;
@@ -21,7 +24,7 @@ interface ITasksProps {
 }
 function Tasks({ value, handleCommitStatus }: ITasksProps) {
   const dispatch = useAppDispatch();
-  const classes = useTasksStyles();
+  const classes = useCustomTapsStyles();
 
   const [generateHabbitList, setGenerateHabbitList] = useState<IHabbit[]>([]);
   const { habbits } = useAppSelector((state) => state.habbit);

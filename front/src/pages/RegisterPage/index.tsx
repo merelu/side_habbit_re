@@ -4,10 +4,10 @@ import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
 import { Box, Button, Divider, Typography } from "@material-ui/core";
 import { useRegisterPageStyles } from "./styles";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch } from "@store/hooks";
 import { push } from "connected-react-router";
-import { registerUser } from "../../_actions/user_actions";
-import { occur, occurError } from "../../_reducers/alertSlice";
+import { registerUser } from "@_actions/user_actions";
+import { occur, occurError } from "@_reducers/alertSlice";
 
 const registerSchema = Yup.object().shape({
   email: Yup.string().email("Email is invalid").required("Email is required"),

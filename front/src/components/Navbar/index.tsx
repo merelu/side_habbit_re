@@ -11,10 +11,10 @@ import React, { useCallback } from "react";
 import { Link } from "react-router-dom";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import DrawerMenu from "../DrawerMenu";
+import DrawerMenu from "@components/DrawerMenu";
 import { useNavBarStyles } from "./styles";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { logoutUser } from "../../_actions/user_actions";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { logoutUser } from "@_actions/user_actions";
 import { push } from "connected-react-router";
 
 function MainNavbar() {

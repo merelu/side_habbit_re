@@ -12,10 +12,10 @@ import {
 } from "@material-ui/core";
 import { useLoginPageStyles } from "./styles";
 import { Link } from "react-router-dom";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch } from "@store/hooks";
 import { push } from "connected-react-router";
-import { loginUser } from "../../_actions/user_actions";
-import { occur, occurError } from "../../_reducers/alertSlice";
+import { loginUser } from "@_actions/user_actions";
+import { occur, occurError } from "@_reducers/alertSlice";
 
 const loginSchema = Yup.object().shape({
   email: Yup.string().email("Email is invalid").required("Email is required"),

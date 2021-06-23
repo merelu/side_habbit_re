@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IHabbit } from "../typings/db";
-import { createHabbit, getTodayHabbits } from "../_actions/habbit_actions";
+import { IHabbit } from "@typings/db";
+import { createHabbit, getTodayHabbits } from "@_actions/habbit_actions";
 
 interface IHabbitReducerState {
   isLoading: boolean;

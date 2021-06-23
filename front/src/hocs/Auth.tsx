@@ -1,8 +1,8 @@
 import { push } from "connected-react-router";
 import React, { useEffect } from "react";
-import { useAppDispatch } from "../store/hooks";
-import { authUser } from "../_actions/user_actions";
-import { occurError } from "../_reducers/alertSlice";
+import { useAppDispatch } from "@store/hooks";
+import { authUser } from "@_actions/user_actions";
+import { occurError } from "@_reducers/alertSlice";
 
 function Auth(
   SpecificComponent: React.FC,

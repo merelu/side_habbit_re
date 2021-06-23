@@ -1,5 +1,5 @@
 import React from "react";
-import CustomTabs from "../../components/CustomTabs";
+import CustomTabs from "@components/CustomTabs";
 
 function MyHabbitPage() {
   return <CustomTabs />;

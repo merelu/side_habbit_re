@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IUser } from "../typings/db";
+import { IUser } from "@typings/db";
 import {
   authUser,
   loginUser,
   logoutUser,
   registerUser,
-} from "../_actions/user_actions";
+} from "@_actions/user_actions";
 
 interface IUserReducerState {
   isLoading: boolean;

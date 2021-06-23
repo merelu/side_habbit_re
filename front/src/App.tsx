@@ -2,14 +2,14 @@ import { Container } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import React from "react";
 import { Route, Switch } from "react-router";
-import CustomSnackbar from "./components/CustomSnackbar";
-import MainNavbar from "./components/Navbar";
+import MainNavbar from "@components/Navbar";
+import CustomSnackbar from "@components/CustomSnackbar";
 import GlobalStyles from "./GlobalStyles";
-import Auth from "./hocs/Auth";
-import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
-import MyHabbitPage from "./pages/MyHabbitPage";
-import RegisterPage from "./pages/RegisterPage";
+import Auth from "@hocs/Auth";
+import LandingPage from "@pages/LandingPage";
+import LoginPage from "@pages/LoginPage";
+import MyHabbitPage from "@pages/MyHabbitPage";
+import RegisterPage from "@pages/RegisterPage";
 import theme from "./theme";
 
 function App() {

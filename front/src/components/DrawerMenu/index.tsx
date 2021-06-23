@@ -13,9 +13,9 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import { useDrawerMenuStyles } from "./styles";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch } from "@store/hooks";
 import { push } from "connected-react-router";
-import { IUser } from "../../typings/db";
+import { IUser } from "@typings/db";
 
 interface IDrawerMenu {
   onClickLogout: () => void;
