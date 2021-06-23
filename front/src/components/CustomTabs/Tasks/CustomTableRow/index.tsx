@@ -1,10 +1,13 @@
 import React, { useMemo } from "react";
 import { TableRow, Checkbox } from "@material-ui/core";
 import dayjs from "dayjs";
-import { useAppDispatch } from "../../../../store/hooks";
-import { IHabbit } from "../../../../typings/db";
-import { handleCheckedState } from "../../../../_reducers/habbitSlice";
-import { useTasksStyles, StyledTableCell } from "../styles";
+import { useAppDispatch } from "@store/hooks";
+import { IHabbit } from "@typings/db";
+import { handleCheckedState } from "@_reducers/habbitSlice";
+import {
+  useCustomTapsStyles,
+  StyledTableCell,
+} from "@components/CustomTabs/styles";
 
 interface ICustomTableRowProps {
   habbit: IHabbit;
@@ -31,7 +34,7 @@ const parsingNextDate = (arr: boolean[], dayOfWeek: number): string => {
 };
 
 function CustomTableRow({ habbit, isItemSelected }: ICustomTableRowProps) {
-  const classes = useTasksStyles();
+  const classes = useCustomTapsStyles();
   const dispatch = useAppDispatch();
   const handleClick = (e: React.MouseEvent<unknown>, _id: string) => {
     dispatch(handleCheckedState(_id));
