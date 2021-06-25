@@ -8,10 +8,12 @@ import {
   useCustomTapsStyles,
   StyledTableCell,
 } from "@components/CustomTabs/styles";
+import { occurError } from "@_reducers/alertSlice";
 
 interface ICustomTableRowProps {
   habbit: IHabbit;
   isItemSelected: boolean;
+  isItemDisabled: boolean;
 }
 
 const parsingNextDate = (arr: boolean[], dayOfWeek: number): string => {
@@ -33,10 +35,20 @@ const parsingNextDate = (arr: boolean[], dayOfWeek: number): string => {
   return dayjs().add(count, "day").format("YYYY-MM-DD");
 };
 
-function CustomTableRow({ habbit, isItemSelected }: ICustomTableRowProps) {
+function CustomTableRow({
+  habbit,
+  isItemSelected,
+  isItemDisabled,
+}: ICustomTableRowProps) {
   const classes = useCustomTapsStyles();
   const dispatch = useAppDispatch();
   const handleClick = (e: React.MouseEvent<unknown>, _id: string) => {
+    if (isItemDisabled) {
+      dispatch(
+        occurError("이미 commit된 습관입니다. commit버튼을 눌러서 수정해주세요")
+      );
+      return;
+    }
     dispatch(handleCheckedState(_id));
   };
   const nextDate = useMemo(
@@ -53,7 +65,7 @@ function CustomTableRow({ habbit, isItemSelected }: ICustomTableRowProps) {
       selected={isItemSelected}
     >
       <StyledTableCell padding="checkbox">
-        <Checkbox checked={isItemSelected} />
+        <Checkbox checked={isItemSelected} disabled={isItemDisabled} />
       </StyledTableCell>
       <StyledTableCell
         component="th"

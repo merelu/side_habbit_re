@@ -25,7 +25,6 @@ interface ITasksProps {
 function Tasks({ value, handleCommitStatus }: ITasksProps) {
   const dispatch = useAppDispatch();
   const classes = useCustomTapsStyles();
-
   const [generateHabbitList, setGenerateHabbitList] = useState<IHabbit[]>([]);
   const { habbits } = useAppSelector((state) => state.habbit);
   const { userData } = useAppSelector((state) => state.user);
@@ -70,6 +69,19 @@ function Tasks({ value, handleCommitStatus }: ITasksProps) {
     },
     [generateHabbitList]
   );
+
+  const isDisabled = useCallback((_id: string) => {
+    const localCommited = localStorage.getItem("commited");
+    let parseCommited: string[] = [];
+    parseCommited = localCommited
+      ? (JSON.parse(localCommited) as string[])
+      : [];
+    if (parseCommited.indexOf(_id) >= 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }, []);
 
   useEffect(() => {
     const getHabbits = async () => {
@@ -125,11 +137,16 @@ function Tasks({ value, handleCommitStatus }: ITasksProps) {
         <TableBody>
           {generateHabbitList.map((habbit) => {
             const isItemSelected = isSelected(habbit._id);
+            const isItemDisabled = isDisabled(habbit._id);
+
             return (
               <CustomTableRow
                 key={habbit._id}
                 habbit={habbit}
-                isItemSelected={isItemSelected}
+                isItemSelected={
+                  isItemDisabled ? isItemDisabled : isItemSelected
+                }
+                isItemDisabled={isItemDisabled}
               />
             );
           })}

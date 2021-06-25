@@ -5,6 +5,8 @@ import CheckIcon from "@material-ui/icons/Check";
 import { useCustomTapsStyles } from "@components/CustomTabs/styles";
 import AddHabbitModal from "./AddHabbitModal";
 import CommitModal from "./CommitModal";
+import { useAppDispatch, useAppSelector } from "@store/hooks";
+import { occurError } from "@_reducers/alertSlice";
 
 interface IEnhancedToolbarProps {
   commitStatus: boolean;
@@ -13,15 +15,26 @@ export default function EnhancedToolbar({
   commitStatus,
 }: IEnhancedToolbarProps) {
   const classes = useCustomTapsStyles();
+  const dispatch = useAppDispatch();
+  const { habbits } = useAppSelector((state) => state.habbit);
   const [addHabbitModalOpen, setAddHabbitModalOpen] = useState(false);
   const [commitModalOpen, setCommitModalOpen] = useState(false);
 
   const onClickAddHabbitModal = useCallback(() => {
     setAddHabbitModalOpen(true);
   }, []);
+
   const onClickCommitModal = useCallback(() => {
-    setCommitModalOpen(true);
-  }, []);
+    if (
+      habbits.filter((habbit) => habbit.checked === true).length === 0 &&
+      localStorage.getItem("commited") === null
+    ) {
+      dispatch(occurError("선택된 습관이 없습니다."));
+    } else {
+      setCommitModalOpen(true);
+    }
+  }, [dispatch, habbits]);
+
   const onCloseModal = useCallback(() => {
     setAddHabbitModalOpen(false);
     setCommitModalOpen(false);
