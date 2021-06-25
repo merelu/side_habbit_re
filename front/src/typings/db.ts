@@ -15,7 +15,7 @@ export interface IValidationErrors {
 
 export interface IHabbit {
   _id: string;
-  title?: string;
+  title: string;
   category: number;
   expiredDate: Date;
   writer: string;
