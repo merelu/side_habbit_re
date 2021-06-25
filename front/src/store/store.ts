@@ -9,6 +9,7 @@ import { createBrowserHistory } from "history";
 import alertSlice from "@_reducers/alertSlice";
 import habbitSlice from "@_reducers/habbitSlice";
 import userSlice from "@_reducers/userSlice";
+import commitSlice from "@_reducers/commitSlice";
 
 export const history = createBrowserHistory();
 
@@ -17,6 +18,7 @@ const reducer = combineReducers({
   user: userSlice,
   habbit: habbitSlice,
   alert: alertSlice,
+  commit: commitSlice,
 });
 
 export const store = configureStore({
