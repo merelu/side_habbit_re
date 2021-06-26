@@ -1,39 +1,62 @@
-import { createSlice, PayloadAction, SerializedError } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { IHabbit } from "@typings/db";
-import { addCommited, getCommited } from "@_actions/commit_actions";
+import {
+  addCommited,
+  deleteCommited,
+  getCommited,
+} from "@_actions/commit_actions";
 
 interface commitState {
+  isLoading: boolean;
   commited: IHabbit[];
-  error: SerializedError | null;
+  error: string;
 }
 
 const initialState = {
+  isLoading: false,
   commited: [],
-  error: null,
+  error: "",
 } as commitState;
 
 const commitSlice = createSlice({
   name: "commit",
   initialState,
-  reducers: {
-    deleteCommitedItem(state, action: PayloadAction<string>) {
-      state.commited = state.commited.filter(
-        (item) => item._id !== action.payload
-      );
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getCommited.fulfilled, (state, action) => {
-      state.commited = state.commited.concat(action.payload);
-    });
-    builder.addCase(getCommited.rejected, (state, action) => {
-      state.error = action.error;
-    });
-    builder.addCase(addCommited.fulfilled, (state, action) => {
+      state.isLoading = false;
       state.commited = action.payload;
     });
+    builder.addCase(addCommited.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.commited = action.payload;
+    });
+    builder.addCase(deleteCommited.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.commited = action.payload;
+    });
+    builder.addMatcher(
+      (action) => {
+        return (
+          action.type.includes("/pending") && action.type.includes("commits")
+        );
+      },
+      (state, action) => {
+        state.isLoading = true;
+      }
+    );
+    builder.addMatcher(
+      (action) => {
+        return (
+          action.type.includes("/rejected") && action.type.includes("commits")
+        );
+      },
+      (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      }
+    );
   },
 });
-export const { deleteCommitedItem } = commitSlice.actions;
 
 export default commitSlice.reducer;
