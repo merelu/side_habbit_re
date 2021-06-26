@@ -8,15 +8,13 @@ import CommitModal from "./CommitModal";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { occurError } from "@_reducers/alertSlice";
 
-interface IEnhancedToolbarProps {
-  commitStatus: boolean;
-}
-export default function EnhancedToolbar({
-  commitStatus,
-}: IEnhancedToolbarProps) {
+export default function EnhancedToolbar() {
   const classes = useCustomTapsStyles();
   const dispatch = useAppDispatch();
   const { habbits } = useAppSelector((state) => state.habbit);
+  const { commited, error: commitError } = useAppSelector(
+    (state) => state.commit
+  );
   const [addHabbitModalOpen, setAddHabbitModalOpen] = useState(false);
   const [commitModalOpen, setCommitModalOpen] = useState(false);
 
@@ -27,13 +25,13 @@ export default function EnhancedToolbar({
   const onClickCommitModal = useCallback(() => {
     if (
       habbits.filter((habbit) => habbit.checked === true).length === 0 &&
-      localStorage.getItem("commited") === null
+      commited.length === 0
     ) {
-      dispatch(occurError("선택된 습관이 없습니다."));
+      dispatch(occurError(commitError));
     } else {
       setCommitModalOpen(true);
     }
-  }, [dispatch, habbits]);
+  }, [commitError, commited.length, dispatch, habbits]);
 
   const onCloseModal = useCallback(() => {
     setAddHabbitModalOpen(false);

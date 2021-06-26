@@ -17,17 +17,18 @@ import {
   useCustomTapsStyles,
   StyledTableCell,
 } from "@components/CustomTabs/styles";
+import { getCommited } from "@_actions/commit_actions";
 
 interface ITasksProps {
   value: number;
-  handleCommitStatus: (status: boolean) => void;
 }
-function Tasks({ value, handleCommitStatus }: ITasksProps) {
+function Tasks({ value }: ITasksProps) {
   const dispatch = useAppDispatch();
   const classes = useCustomTapsStyles();
   const [generateHabbitList, setGenerateHabbitList] = useState<IHabbit[]>([]);
   const { habbits } = useAppSelector((state) => state.habbit);
   const { userData } = useAppSelector((state) => state.user);
+  const { commited } = useAppSelector((state) => state.commit);
 
   const handleSelectAllClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (value === 0) {
@@ -70,18 +71,16 @@ function Tasks({ value, handleCommitStatus }: ITasksProps) {
     [generateHabbitList]
   );
 
-  const isDisabled = useCallback((_id: string) => {
-    const localCommited = localStorage.getItem("commited");
-    let parseCommited: string[] = [];
-    parseCommited = localCommited
-      ? (JSON.parse(localCommited) as string[])
-      : [];
-    if (parseCommited.indexOf(_id) >= 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }, []);
+  const isDisabled = useCallback(
+    (_id: string) => {
+      if (commited.find((item) => item._id === _id)) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    [commited]
+  );
 
   useEffect(() => {
     const getHabbits = async () => {
@@ -113,8 +112,9 @@ function Tasks({ value, handleCommitStatus }: ITasksProps) {
           habbits.filter((habbit) => habbit.category === value - 1)
         );
       }
+      dispatch(getCommited());
     }
-  }, [habbits, value]);
+  }, [dispatch, habbits, value]);
 
   if (generateHabbitList) {
     return (

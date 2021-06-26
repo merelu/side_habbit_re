@@ -22,6 +22,7 @@ import { IHabbit } from "@typings/db";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { handleCheckedState } from "@_reducers/habbitSlice";
 import { useCustomTapsStyles } from "@components/CustomTabs/styles";
+import { addCommited, deleteCommited } from "@_actions/commit_actions";
 
 interface ICommitModalProps {
   open: boolean;
@@ -44,83 +45,39 @@ function CommitModal({ open, onCloseModal }: ICommitModalProps) {
   const classes = useCustomTapsStyles();
   const dispatch = useAppDispatch();
   const [commitHabbits, setCommitHabbits] = useState<IHabbit[]>([]);
-  const [alreadyCommited, setAlreadyCommited] = useState<IHabbit[]>([]);
   const { habbits } = useAppSelector((state) => state.habbit);
+  const { commited } = useAppSelector((state) => state.commit);
 
-  const onClickAlreadyCommitedDelete = useCallback(
+  const onClickCommitedDelete = useCallback(
     (_id: string) => {
-      let localCommited = localStorage.getItem("commited");
-      let parseCommited: string[] = [];
-      parseCommited = localCommited
-        ? (JSON.parse(localCommited) as string[])
-        : [];
-      parseCommited = parseCommited.filter((commit) => commit !== _id);
-      if (parseCommited.length === 0) {
-        onCloseModal();
-        localStorage.removeItem("commited");
-      } else {
-        localStorage.setItem("commited", JSON.stringify(parseCommited));
-        setAlreadyCommited((prev) => prev.filter((item) => item._id !== _id));
-      }
+      dispatch(deleteCommited(_id));
     },
-    [onCloseModal]
+    [dispatch]
   );
 
   const onClickNewCommitDelete = useCallback(
     (_id: string) => {
       if (commitHabbits.length === 1) {
-        dispatch(handleCheckedState);
         onCloseModal();
-      } else {
-        dispatch(handleCheckedState(_id));
       }
+      dispatch(handleCheckedState(_id));
     },
     [commitHabbits.length, dispatch, onCloseModal]
   );
 
-  const submitCommit = useCallback(() => {
-    const commited = commitHabbits.map((habbit) => habbit._id);
-    if (localStorage.getItem("commited") === null) {
-      localStorage.setItem("commited", JSON.stringify(commited));
-      commited.forEach((commit) => {
-        dispatch(handleCheckedState(commit));
+  const submitCommit = useCallback(async () => {
+    const resultAction = await dispatch(addCommited(commitHabbits));
+    if (addCommited.fulfilled.match(resultAction)) {
+      commitHabbits.forEach((item) => {
+        dispatch(handleCheckedState(item._id));
       });
-    } else {
-      let localCommited = localStorage.getItem("commited");
-      let parseCommited: string[] = [];
-      parseCommited = localCommited
-        ? (JSON.parse(localCommited) as string[])
-        : [];
-      commited.forEach((commit) => {
-        if (parseCommited.indexOf(commit) < 0) {
-          parseCommited.push(commit);
-          dispatch(handleCheckedState(commit));
-        }
-      });
-
-      localStorage.setItem("commited", JSON.stringify(parseCommited));
     }
+
     onCloseModal();
   }, [commitHabbits, dispatch, onCloseModal]);
 
   useEffect(() => {
     setCommitHabbits(habbits.filter((habbit) => habbit.checked === true));
-    if (localStorage.getItem("commited") !== null) {
-      let localCommited = localStorage.getItem("commited");
-      let parseCommited: string[] = [];
-      let already: IHabbit[] = [];
-      parseCommited = localCommited
-        ? (JSON.parse(localCommited) as string[])
-        : [];
-      parseCommited.forEach((id) => {
-        habbits.forEach((habbit) => {
-          if (habbit._id === id) {
-            already.push(habbit);
-          }
-        });
-      });
-      setAlreadyCommited(already);
-    }
   }, [habbits]);
 
   return (
@@ -129,8 +86,8 @@ function CommitModal({ open, onCloseModal }: ICommitModalProps) {
       <DialogContent>
         <DialogContentText>Already Commited</DialogContentText>
         <List>
-          {alreadyCommited.map((habbit) => (
-            <ListItem key={habbit._id + "commit"}>
+          {commited.map((habbit, index) => (
+            <ListItem key={index + "commited"}>
               <ListItemAvatar>
                 <Avatar>{selectIcon(habbit.category)}</Avatar>
               </ListItemAvatar>
@@ -142,7 +99,7 @@ function CommitModal({ open, onCloseModal }: ICommitModalProps) {
                 <IconButton
                   edge="end"
                   aria-label="delete"
-                  onClick={(e) => onClickAlreadyCommitedDelete(habbit._id)}
+                  onClick={(e) => onClickCommitedDelete(habbit._id)}
                 >
                   <DeleteIcon />
                 </IconButton>
