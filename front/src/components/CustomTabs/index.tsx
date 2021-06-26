@@ -11,17 +11,14 @@ import { useCustomTapsStyles } from "./styles";
 export default function CustomTabs() {
   const classes = useCustomTapsStyles();
   const [value, setValue] = useState(0);
-  const [commitStatus, setCommitStatus] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
-  const handleCommitStatus = useCallback((status: boolean) => {
-    setCommitStatus(status);
-  }, []);
 
   return (
     <Paper className={classes.paper}>
-      <EnhancedToolbar commitStatus={commitStatus} />
+      <EnhancedToolbar />
       <Divider />
       <Tabs
         value={value}
@@ -36,7 +33,7 @@ export default function CustomTabs() {
         <Tab icon={<SportsEsportsIcon />} label="Hobby"></Tab>
       </Tabs>
       <Divider />
-      <Tasks value={value} handleCommitStatus={handleCommitStatus} />
+      <Tasks value={value} />
     </Paper>
   );
 }
