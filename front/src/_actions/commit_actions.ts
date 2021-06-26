@@ -4,31 +4,46 @@ import { IHabbit } from "@typings/db";
 export const getCommited = createAsyncThunk(
   "commits/get",
   async (value, { rejectWithValue }) => {
-    try {
-      const response = await localStorage.getItem("commited");
-      if (response === null) {
-        throw new Error("저장된 commit이 없습니다.");
-      } else {
-        return JSON.parse(response) as IHabbit[];
-      }
-    } catch (err) {
-      return rejectWithValue(err);
+    const response = await localStorage.getItem("commited");
+    if (response === null) {
+      return rejectWithValue("commit된 습관이 없습니다.");
+    } else {
+      return JSON.parse(response) as IHabbit[];
     }
   }
 );
 
-export const addCommited = createAsyncThunk(
+export const addCommited = createAsyncThunk<IHabbit[], IHabbit[]>(
   "commits/add",
-  async (value: IHabbit[]) => {
-    const response = await localStorage.getItem("commited");
-    let parseResponse = [];
+  async (commited: IHabbit[], { rejectWithValue }) => {
+    if (commited.length === 0) {
+      return rejectWithValue("commit된 습관이 없습니다.");
+    }
+    const response = localStorage.getItem("commited");
+    let parseResponse: IHabbit[] = [];
     if (response === null) {
-      await localStorage.setItem("commited", JSON.stringify(value));
-      return await value;
+      localStorage.setItem("commited", JSON.stringify(commited));
+      return commited;
     }
     parseResponse = JSON.parse(response) as IHabbit[];
-    parseResponse.concat(value);
-    await localStorage.setItem("commited", JSON.stringify(parseResponse));
-    return await parseResponse;
+    commited.forEach((commit) => {
+      if (parseResponse.findIndex((item) => item._id === commit._id) < 0) {
+        parseResponse.push(commit);
+      }
+    });
+    localStorage.setItem("commited", JSON.stringify(parseResponse));
+    return parseResponse;
+  }
+);
+
+export const deleteCommited = createAsyncThunk<IHabbit[], string>(
+  "commits/delete",
+  async (id, { rejectWithValue }) => {
+    const response = localStorage.getItem("commited") as string;
+    let parseResponse: IHabbit[] = [];
+    parseResponse = JSON.parse(response) as IHabbit[];
+    parseResponse = parseResponse.filter((item) => item._id !== id);
+    localStorage.setItem("commited", JSON.stringify(parseResponse));
+    return parseResponse;
   }
 );
