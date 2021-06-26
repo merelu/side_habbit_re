@@ -39,7 +39,9 @@ const userSlice = createSlice({
     });
     builder.addMatcher(
       (action) => {
-        return action.type.includes("/pending");
+        return (
+          action.type.includes("/pending") && action.type.includes("users")
+        );
       },
       (state, action) => {
         state.isLoading = true;
@@ -47,7 +49,9 @@ const userSlice = createSlice({
     );
     builder.addMatcher(
       (action) => {
-        return action.type.includes("/rejected");
+        return (
+          action.type.includes("/rejected") && action.type.includes("users")
+        );
       },
       (state, action) => {
         state.isLoading = false;

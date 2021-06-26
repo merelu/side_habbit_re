@@ -61,7 +61,9 @@ const habbitSlice = createSlice({
     });
     builder.addMatcher(
       (action) => {
-        return action.type.includes("/pending");
+        return (
+          action.type.includes("/pending") && action.type.includes("habbit")
+        );
       },
       (state, action) => {
         state.isLoading = true;
@@ -69,7 +71,9 @@ const habbitSlice = createSlice({
     );
     builder.addMatcher(
       (action) => {
-        return action.type.includes("/rejected");
+        return (
+          action.type.includes("/rejected") && action.type.includes("habbit")
+        );
       },
       (state, action) => {
         state.isLoading = false;
