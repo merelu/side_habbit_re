@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IHabbit } from "@typings/db";
+import { ICommit } from "@typings/db";
 import {
   addCommited,
   deleteCommited,
@@ -8,7 +8,7 @@ import {
 
 interface commitState {
   isLoading: boolean;
-  commited: IHabbit[];
+  commited: ICommit[];
   error: string;
 }
 
