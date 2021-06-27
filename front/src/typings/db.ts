@@ -22,3 +22,12 @@ export interface IHabbit {
   schedule: boolean[];
   checked: boolean;
 }
+
+export interface ICommit {
+  _id?: string;
+  writer: string;
+  habbitId: string;
+  title: string;
+  category: number;
+  createAt: string;
+}
