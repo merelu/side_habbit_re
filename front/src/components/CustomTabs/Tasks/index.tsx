@@ -73,7 +73,7 @@ function Tasks({ value }: ITasksProps) {
 
   const isDisabled = useCallback(
     (_id: string) => {
-      if (commited.find((item) => item._id === _id)) {
+      if (commited.find((item) => item.habbitId === _id)) {
         return true;
       } else {
         return false;
@@ -112,9 +112,11 @@ function Tasks({ value }: ITasksProps) {
           habbits.filter((habbit) => habbit.category === value - 1)
         );
       }
-      dispatch(getCommited());
+      if (userData) {
+        dispatch(getCommited(userData._id));
+      }
     }
-  }, [dispatch, habbits, value]);
+  }, [dispatch, habbits, userData, value]);
 
   if (generateHabbitList) {
     return (

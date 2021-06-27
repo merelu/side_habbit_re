@@ -45,14 +45,17 @@ function CommitModal({ open, onCloseModal }: ICommitModalProps) {
   const classes = useCustomTapsStyles();
   const dispatch = useAppDispatch();
   const [commitHabbits, setCommitHabbits] = useState<IHabbit[]>([]);
+  const { userData } = useAppSelector((state) => state.user);
   const { habbits } = useAppSelector((state) => state.habbit);
   const { commited } = useAppSelector((state) => state.commit);
 
   const onClickCommitedDelete = useCallback(
-    (_id: string) => {
-      dispatch(deleteCommited(_id));
+    (habbitId: string) => {
+      if (userData) {
+        dispatch(deleteCommited({ habbitId, userId: userData._id }));
+      }
     },
-    [dispatch]
+    [dispatch, userData]
   );
 
   const onClickNewCommitDelete = useCallback(
@@ -66,15 +69,19 @@ function CommitModal({ open, onCloseModal }: ICommitModalProps) {
   );
 
   const submitCommit = useCallback(async () => {
-    const resultAction = await dispatch(addCommited(commitHabbits));
-    if (addCommited.fulfilled.match(resultAction)) {
-      commitHabbits.forEach((item) => {
-        dispatch(handleCheckedState(item._id));
-      });
+    if (userData) {
+      const resultAction = await dispatch(
+        addCommited({ commited: commitHabbits, userId: userData._id })
+      );
+      if (addCommited.fulfilled.match(resultAction)) {
+        commitHabbits.forEach((item) => {
+          dispatch(handleCheckedState(item._id));
+        });
+      }
     }
 
     onCloseModal();
-  }, [commitHabbits, dispatch, onCloseModal]);
+  }, [commitHabbits, dispatch, onCloseModal, userData]);
 
   useEffect(() => {
     setCommitHabbits(habbits.filter((habbit) => habbit.checked === true));
@@ -86,26 +93,27 @@ function CommitModal({ open, onCloseModal }: ICommitModalProps) {
       <DialogContent>
         <DialogContentText>Already Commited</DialogContentText>
         <List>
-          {commited.map((habbit, index) => (
-            <ListItem key={index + "commited"}>
-              <ListItemAvatar>
-                <Avatar>{selectIcon(habbit.category)}</Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={habbit.title}
-                className={classes.wideColumn}
-              />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={(e) => onClickCommitedDelete(habbit._id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
+          {commited &&
+            commited.map((commit, index) => (
+              <ListItem key={index + "commited"}>
+                <ListItemAvatar>
+                  <Avatar>{selectIcon(commit.category)}</Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={commit.title}
+                  className={classes.wideColumn}
+                />
+                <ListItemSecondaryAction>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={(e) => onClickCommitedDelete(commit.habbitId)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
         </List>
         <DialogContentText>New commited</DialogContentText>
         <List>
