@@ -2,9 +2,11 @@ import React, { useCallback, useState } from "react";
 import { Toolbar, Typography, Tooltip, Button } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CheckIcon from "@material-ui/icons/Check";
+import BackupIcon from "@material-ui/icons/Backup";
 import { useCustomTapsStyles } from "@components/CustomTabs/styles";
 import AddHabbitModal from "./AddHabbitModal";
 import CommitModal from "./CommitModal";
+import PushModal from "./PushModal";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import { occurError } from "@_reducers/alertSlice";
 
@@ -17,6 +19,7 @@ export default function EnhancedToolbar() {
   );
   const [addHabbitModalOpen, setAddHabbitModalOpen] = useState(false);
   const [commitModalOpen, setCommitModalOpen] = useState(false);
+  const [pushModalOpen, setPushModalOpen] = useState(false);
 
   const onClickAddHabbitModal = useCallback(() => {
     setAddHabbitModalOpen(true);
@@ -27,15 +30,24 @@ export default function EnhancedToolbar() {
       habbits.filter((habbit) => habbit.checked === true).length === 0 &&
       commited.length === 0
     ) {
-      dispatch(occurError(commitError));
+      dispatch(
+        occurError(
+          commitError === "" ? "commit할 습관이 없습니다." : commitError
+        )
+      );
     } else {
       setCommitModalOpen(true);
     }
   }, [commitError, commited.length, dispatch, habbits]);
 
+  const onClickPushModal = useCallback(() => {
+    setPushModalOpen(true);
+  }, []);
+
   const onCloseModal = useCallback(() => {
     setAddHabbitModalOpen(false);
     setCommitModalOpen(false);
+    setPushModalOpen(false);
   }, []);
 
   return (
@@ -64,9 +76,21 @@ export default function EnhancedToolbar() {
             Commit
           </Button>
         </Tooltip>
+        <Tooltip title="commit">
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="secondary"
+            startIcon={<BackupIcon />}
+            onClick={onClickPushModal}
+          >
+            Push
+          </Button>
+        </Tooltip>
       </div>
       <AddHabbitModal open={addHabbitModalOpen} onCloseModal={onCloseModal} />
       <CommitModal open={commitModalOpen} onCloseModal={onCloseModal} />
+      <PushModal open={pushModalOpen} onCloseModal={onCloseModal} />
     </Toolbar>
   );
 }
