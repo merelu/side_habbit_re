@@ -9,7 +9,6 @@ router.post("/create", isLoggedIn, (req, res, next) => {
   const habbit = new Habbit(req.body);
 
   habbit.save((err, doc) => {
-    console.log(doc);
     if (err)
       return res
         .status(401)
