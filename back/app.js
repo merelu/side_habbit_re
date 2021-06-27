@@ -14,6 +14,8 @@ dotenv.config();
 
 const userRouter = require("./routes/user");
 const habbitRouter = require("./routes/habbit");
+const commitRouter = require("./routes/commit");
+
 const passportConfig = require("./passport");
 const connect = require("./models");
 
@@ -73,6 +75,7 @@ app.use("/uploads", express.static("uploads"));
 //router
 app.use("/api/users", userRouter);
 app.use("/api/habbits", habbitRouter);
+app.use("/api/commits", commitRouter);
 
 app.listen(app.get("PORT"), () => {
   console.log(`listening on port ${app.get("PORT")}`);
