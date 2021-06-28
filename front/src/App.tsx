@@ -21,6 +21,7 @@ function App() {
         maxWidth="lg"
         style={{
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "centers",
         }}
