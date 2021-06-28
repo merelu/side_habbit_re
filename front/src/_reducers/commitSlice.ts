@@ -4,17 +4,21 @@ import {
   addCommited,
   deleteCommited,
   getCommited,
+  getTodayPushed,
+  pushCommited,
 } from "@_actions/commit_actions";
 
 interface commitState {
   isLoading: boolean;
   commited: ICommit[];
+  pushed: ICommit[];
   error: string;
 }
 
 const initialState = {
   isLoading: false,
   commited: [],
+  pushed: [],
   error: "",
 } as commitState;
 
@@ -34,6 +38,19 @@ const commitSlice = createSlice({
     builder.addCase(deleteCommited.fulfilled, (state, action) => {
       state.isLoading = false;
       state.commited = action.payload;
+    });
+    builder.addCase(pushCommited.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.commited = [];
+    });
+    builder.addCase(getTodayPushed.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.pushed = action.payload.pushed.map((item) => ({
+        ...item,
+        habbitId: item.habbitId._id,
+        title: item.habbitId.title,
+        category: item.habbitId.category,
+      }));
     });
     builder.addMatcher(
       (action) => {
