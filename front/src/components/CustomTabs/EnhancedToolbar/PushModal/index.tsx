@@ -17,8 +17,13 @@ import MenuBookIcon from "@material-ui/icons/MenuBook";
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import { useCustomTapsStyles } from "@components/CustomTabs/styles";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { IPushCommitedBody, pushCommited } from "@_actions/commit_actions";
+import {
+  getTodayPushed,
+  IPushCommitedBody,
+  pushCommited,
+} from "@_actions/commit_actions";
 import dayjs from "dayjs";
+import { getTodayHabbits } from "@_actions/habbit_actions";
 
 interface IPushModalProps {
   open: boolean;
@@ -43,22 +48,33 @@ function PushModal({ open, onCloseModal }: IPushModalProps) {
   const { userData } = useAppSelector((state) => state.user);
   const classes = useCustomTapsStyles();
 
-  const onClickPushButton = useCallback(() => {
+  const onClickPushButton = useCallback(async () => {
     if (userData) {
       const body: IPushCommitedBody[] = commited.map((commit) => ({
         writer: commit.writer,
         habbitId: commit.habbitId,
         createAt: dayjs(commit.createAt).toDate(),
       }));
-      dispatch(pushCommited(body));
+      const resultAction = await dispatch(pushCommited(body));
+      if (pushCommited.fulfilled.match(resultAction)) {
+        dispatch(
+          getTodayHabbits({
+            userId: userData._id,
+            date: dayjs().format("YYYY-MM-DD"),
+          })
+        );
+        dispatch(getTodayPushed(dayjs().format("YYYY-MM-DD")));
+        localStorage.removeItem(`${userData._id}-commited`);
+        onCloseModal();
+      }
     }
-  }, [commited, dispatch, userData]);
+  }, [commited, dispatch, onCloseModal, userData]);
 
   return (
     <Dialog open={open} onClose={onCloseModal}>
       <DialogTitle>Push</DialogTitle>
       <DialogContent>
-        <DialogContentText>Pushed Commited</DialogContentText>
+        <DialogContentText>To Push Commits</DialogContentText>
         <List>
           {commited.map((habbit, index) => (
             <ListItem key={index + "pushed"}>

@@ -112,11 +112,14 @@ function Tasks({ value }: ITasksProps) {
           habbits.filter((habbit) => habbit.category === value - 1)
         );
       }
-      if (userData) {
-        dispatch(getCommited(userData._id));
-      }
     }
-  }, [dispatch, habbits, userData, value]);
+  }, [dispatch, habbits, value]);
+
+  useEffect(() => {
+    if (userData) {
+      dispatch(getCommited(userData._id));
+    }
+  }, [dispatch, userData]);
 
   if (generateHabbitList) {
     return (
