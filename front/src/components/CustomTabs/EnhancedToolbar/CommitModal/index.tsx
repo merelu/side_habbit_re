@@ -53,9 +53,12 @@ function CommitModal({ open, onCloseModal }: ICommitModalProps) {
     (habbitId: string) => {
       if (userData) {
         dispatch(deleteCommited({ habbitId, userId: userData._id }));
+        if (commited.length === 1 && commitHabbits.length === 0) {
+          onCloseModal();
+        }
       }
     },
-    [dispatch, userData]
+    [commitHabbits.length, commited.length, dispatch, onCloseModal, userData]
   );
 
   const onClickNewCommitDelete = useCallback(
@@ -91,30 +94,33 @@ function CommitModal({ open, onCloseModal }: ICommitModalProps) {
     <Dialog open={open} onClose={onCloseModal}>
       <DialogTitle>Commit</DialogTitle>
       <DialogContent>
-        <DialogContentText>Already Commited</DialogContentText>
-        <List>
-          {commited &&
-            commited.map((commit, index) => (
-              <ListItem key={index + "commited"}>
-                <ListItemAvatar>
-                  <Avatar>{selectIcon(commit.category)}</Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={commit.title}
-                  className={classes.wideColumn}
-                />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={(e) => onClickCommitedDelete(commit.habbitId)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-        </List>
+        {commited.length > 0 && (
+          <>
+            <DialogContentText>Already Commited</DialogContentText>
+            <List>
+              {commited.map((commit, index) => (
+                <ListItem key={index + "commited"}>
+                  <ListItemAvatar>
+                    <Avatar>{selectIcon(commit.category)}</Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={commit.title}
+                    className={classes.wideColumn}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={(e) => onClickCommitedDelete(commit.habbitId)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </>
+        )}
         <DialogContentText>New commited</DialogContentText>
         <List>
           {commitHabbits.map((habbit) => (
