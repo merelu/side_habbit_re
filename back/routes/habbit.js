@@ -1,6 +1,8 @@
 const express = require("express");
 const dayjs = require("dayjs");
+const mongoose = require("mongoose");
 const { Habbit } = require("../models/Habbit");
+const { Commit } = require("../models/Commit");
 const { isLoggedIn } = require("./middlewares");
 
 const router = express.Router();
@@ -24,19 +26,30 @@ router.get(
   "/getTodayHabbits/:userId/:date",
   isLoggedIn,
   async (req, res, next) => {
-    const habbits = await Habbit.find({
+    const commits = await Commit.find({
       writer: req.params.userId,
-      expiredDate: { $gte: dayjs(req.params.date) },
-    }).exec((err, values) => {
+      createAt: { $lte: dayjs(req.params.date).endOf("day") },
+    }).exec();
+
+    await Habbit.find({
+      writer: req.params.userId,
+      expiredDate: {
+        $gte: dayjs(req.params.date),
+      },
+      [`schedule.${dayjs().day()}`]: true,
+    }).exec((err, docs) => {
       if (err)
         return res
           .status(401)
           .json({ errorMessage: "습관을 가져오는데 실패했습니다." });
-      const habbits = values.filter(
-        (value) => value.schedule[dayjs().day()] === true
+      const habbits = docs.filter(
+        (habbit) =>
+          commits.findIndex(
+            (commit) => commit.habbitId.toString() === habbit._id.toString()
+          ) < 0
       );
 
-      res.status(200).json({ success: true, habbits });
+      return res.status(200).json({ success: true, habbits: habbits });
     });
   }
 );
