@@ -30,19 +30,19 @@ export default function EnhancedToolbar() {
       habbits.filter((habbit) => habbit.checked === true).length === 0 &&
       commited.length === 0
     ) {
-      dispatch(
-        occurError(
-          commitError === "" ? "commit할 습관이 없습니다." : commitError
-        )
-      );
+      dispatch(occurError(commitError));
     } else {
       setCommitModalOpen(true);
     }
   }, [commitError, commited.length, dispatch, habbits]);
 
   const onClickPushModal = useCallback(() => {
-    setPushModalOpen(true);
-  }, []);
+    if (commited.length === 0) {
+      dispatch(occurError("commit된 습관이 없습니다. commit 먼저 해주세요"));
+    } else {
+      setPushModalOpen(true);
+    }
+  }, [commited.length, dispatch]);
 
   const onCloseModal = useCallback(() => {
     setAddHabbitModalOpen(false);

@@ -67,11 +67,7 @@ function CustomTableRow({
       <StyledTableCell padding="checkbox">
         <Checkbox checked={isItemSelected} disabled={isItemDisabled} />
       </StyledTableCell>
-      <StyledTableCell
-        component="th"
-        scope="row"
-        className={classes.wideColumn}
-      >
+      <StyledTableCell component="th" scope="row">
         {habbit.title}
       </StyledTableCell>
       <StyledTableCell align="right">
