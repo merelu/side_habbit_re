@@ -20,6 +20,8 @@ export interface IHabbit {
   expiredDate: Date;
   writer: string;
   schedule: boolean[];
+  createdAt: string;
+  updatedAt: string;
   checked: boolean;
 }
 
@@ -29,5 +31,16 @@ export interface ICommit {
   habbitId: string;
   title: string;
   category: number;
+  createAt: string;
+}
+
+export interface IPushed {
+  _id: string;
+  writer: string;
+  habbitId: {
+    _id: string;
+    title: string;
+    category: number;
+  };
   createAt: string;
 }
