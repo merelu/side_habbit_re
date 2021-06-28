@@ -31,7 +31,7 @@ export const loginUser = createAsyncThunk<
     const response = await axios.post<IUserResponse>("/api/users/login", body, {
       withCredentials: true,
     });
-    return await response.data;
+    return response.data;
   } catch (err) {
     let error: AxiosError<IValidationErrors> = err;
     if (!error.response) {
@@ -60,7 +60,7 @@ export const registerUser = createAsyncThunk<
         withCredentials: true,
       }
     );
-    return await response.data;
+    return response.data;
   } catch (err) {
     let error: AxiosError<IValidationErrors> = err;
     if (!error.response) throw err;
@@ -75,7 +75,7 @@ export const authUser = createAsyncThunk<
 >("users/auth", async (value, { rejectWithValue }) => {
   try {
     const response = await axios.get<IUserResponse>("/api/users/auth");
-    return await response.data;
+    return response.data;
   } catch (err) {
     let error: AxiosError<IValidationErrors> = err;
     if (!error.response) {

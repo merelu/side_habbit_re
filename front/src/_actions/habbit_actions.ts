@@ -35,7 +35,7 @@ export const createHabbit = createAsyncThunk<
       body,
       { withCredentials: true }
     );
-    return await response.data;
+    return response.data;
   } catch (err) {
     let error: AxiosError<IValidationErrors> = err;
     if (!error.response) {
@@ -58,7 +58,7 @@ export const getTodayHabbits = createAsyncThunk<
       `/api/habbits/getTodayHabbits/${data.userId}/${data.date}`,
       { withCredentials: true }
     );
-    return await response.data;
+    return response.data;
   } catch (err) {
     let error: AxiosError<IValidationErrors> = err;
     if (!error.response) {
