@@ -23,7 +23,7 @@ function App() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          alignItems: "centers",
+          alignItems: "center",
         }}
       >
         <Switch>
