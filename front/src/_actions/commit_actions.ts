@@ -17,6 +17,7 @@ interface IDeleteCommitedBody {
 interface IPushResponse {
   success: boolean;
   pushed: IPushed[];
+  pushedAll: IPushed[];
 }
 
 interface IAddCommitBody {
@@ -134,6 +135,33 @@ export const getTodayPushed = createAsyncThunk<
   try {
     const response = await axios.get<IPushResponse>(
       `/api/commits/getTodayPushed/${date}`,
+      { withCredentials: true }
+    );
+    return response.data;
+  } catch (err) {
+    let error: AxiosError<IValidationErrors> = err;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(err.response.data);
+  }
+});
+
+interface getPushedWhithinRangeBody {
+  startDate: string;
+  endDate: string;
+}
+
+export const getPushedWithinRange = createAsyncThunk<
+  IPushResponse,
+  getPushedWhithinRangeBody,
+  {
+    rejectValue: IValidationErrors;
+  }
+>("commits/getPushedWithinRange", async (body, { rejectWithValue }) => {
+  try {
+    const response = await axios.get<IPushResponse>(
+      `/api/commits/getPushedWithinRange/${body.startDate}/${body.endDate}`,
       { withCredentials: true }
     );
     return response.data;
