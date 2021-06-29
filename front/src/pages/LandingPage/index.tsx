@@ -1,7 +1,7 @@
-import React from "react";
+import ContributionGraph from "@components/ContributionGraph";
 
 function LandingPage() {
-  return <div>LandingPage</div>;
+  return <ContributionGraph />;
 }
 
 export default LandingPage;

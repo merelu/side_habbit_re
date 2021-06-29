@@ -5,6 +5,7 @@ import App from "./App";
 import { history, store } from "@store/store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
+import "react-calendar-heatmap/dist/styles.css";
 
 ReactDOM.render(
   <Provider store={store}>
