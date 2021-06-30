@@ -1,13 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICommit } from "@typings/db";
 import {
   addCommited,
   deleteCommited,
   getCommited,
   getPushedWithinRange,
-  getTodayPushed,
   pushCommited,
 } from "@_actions/commit_actions";
+import dayjs from "dayjs";
 
 interface commitState {
   isLoading: boolean;
@@ -28,7 +28,13 @@ const initialState = {
 const commitSlice = createSlice({
   name: "commit",
   initialState,
-  reducers: {},
+  reducers: {
+    getPushed(state, action: PayloadAction<string>) {
+      state.pushed = state.pushedAll.filter((pushed) =>
+        dayjs(pushed.createAt).isSame(action.payload, "day")
+      );
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getCommited.fulfilled, (state, action) => {
       state.isLoading = false;
@@ -45,15 +51,6 @@ const commitSlice = createSlice({
     builder.addCase(pushCommited.fulfilled, (state, action) => {
       state.isLoading = false;
       state.commited = [];
-    });
-    builder.addCase(getTodayPushed.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.pushed = action.payload.pushed.map((item) => ({
-        ...item,
-        habbitId: item.habbitId._id,
-        title: item.habbitId.title,
-        category: item.habbitId.category,
-      }));
     });
     builder.addCase(getPushedWithinRange.fulfilled, (state, action) => {
       state.isLoading = false;
@@ -87,5 +84,5 @@ const commitSlice = createSlice({
     );
   },
 });
-
+export const { getPushed } = commitSlice.actions;
 export default commitSlice.reducer;
