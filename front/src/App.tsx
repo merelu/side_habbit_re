@@ -27,7 +27,7 @@ function App() {
         }}
       >
         <Switch>
-          <Route exact path="/" component={Auth(LandingPage, null)} />
+          <Route exact path="/" component={Auth(LandingPage, true)} />
           <Route path="/login" component={Auth(LoginPage, false)} />
           <Route path="/register" component={Auth(RegisterPage, false)} />
           <Route path="/myHabbit" component={Auth(MyHabbitPage, true)} />
