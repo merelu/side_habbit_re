@@ -17,8 +17,8 @@ import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import FindInPageIcon from "@material-ui/icons/FindInPage";
 import { usePushedListStyles } from "./styles";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
-import { getTodayPushed } from "@_actions/commit_actions";
 import dayjs from "dayjs";
+import { getPushed } from "@_reducers/commitSlice";
 
 const selectIcon = (value: number) => {
   switch (value) {
@@ -36,19 +36,23 @@ const selectIcon = (value: number) => {
 function PushedList() {
   const classes = usePushedListStyles();
   const dispatch = useAppDispatch();
-  const { pushed } = useAppSelector((state) => state.commit);
+  const { pushed, pushedAll } = useAppSelector((state) => state.commit);
   const { userData } = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    if (userData) {
-      dispatch(getTodayPushed(dayjs().format("YYYY-MM-DD")));
+    if (userData && pushedAll) {
+      dispatch(getPushed(dayjs().format("YYYY-MM-DD")));
     }
-  }, [dispatch, userData]);
+  }, [dispatch, pushedAll, userData]);
 
   return (
     <Paper className={classes.paper}>
       <Typography variant="h6" className={classes.title}>
-        Today Pushed Habbits
+        {`${
+          pushed.length > 0
+            ? dayjs(pushed[0].createAt).format("YYYY-MM-DD")
+            : "Today"
+        } Pushed Habbits`}
       </Typography>
       <Divider />
       <List>

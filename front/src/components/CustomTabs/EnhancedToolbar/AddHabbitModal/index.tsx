@@ -71,7 +71,6 @@ export default function AddHabbitModal({
               const resultAction = await dispatch(
                 createHabbit({
                   ...values,
-                  writer: userData._id as string,
                   expiredDate: values.expiredDate.toDate(),
                 })
               );

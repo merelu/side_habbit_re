@@ -84,12 +84,7 @@ function Tasks({ value }: ITasksProps) {
 
   useEffect(() => {
     const getHabbits = async () => {
-      const resultAction = await dispatch(
-        getTodayHabbits({
-          userId: userData?._id as string,
-          date: dayjs().format("YYYY-MM-DD"),
-        })
-      );
+      const resultAction = await dispatch(getTodayHabbits());
       if (getTodayHabbits.fulfilled.match(resultAction)) {
         dispatch(occur("금일 습관을 불러오는데 성공했습니다."));
       } else {

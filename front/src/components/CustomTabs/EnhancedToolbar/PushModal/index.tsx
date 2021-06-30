@@ -18,7 +18,7 @@ import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import { useCustomTapsStyles } from "@components/CustomTabs/styles";
 import { useAppDispatch, useAppSelector } from "@store/hooks";
 import {
-  getTodayPushed,
+  getPushedWithinRange,
   IPushCommitedBody,
   pushCommited,
 } from "@_actions/commit_actions";
@@ -57,13 +57,13 @@ function PushModal({ open, onCloseModal }: IPushModalProps) {
       }));
       const resultAction = await dispatch(pushCommited(body));
       if (pushCommited.fulfilled.match(resultAction)) {
+        dispatch(getTodayHabbits());
         dispatch(
-          getTodayHabbits({
-            userId: userData._id,
-            date: dayjs().format("YYYY-MM-DD"),
+          getPushedWithinRange({
+            startDate: dayjs().format("YYYY-MM-DD"),
+            endDate: dayjs().subtract(1, "year").format("YYYY-MM-DD"),
           })
         );
-        dispatch(getTodayPushed(dayjs().format("YYYY-MM-DD")));
         localStorage.removeItem(`${userData._id}-commited`);
         onCloseModal();
       }
