@@ -121,29 +121,33 @@ function CommitModal({ open, onCloseModal }: ICommitModalProps) {
             </List>
           </>
         )}
-        <DialogContentText>New commited</DialogContentText>
-        <List>
-          {commitHabbits.map((habbit) => (
-            <ListItem key={habbit._id + "commit"}>
-              <ListItemAvatar>
-                <Avatar>{selectIcon(habbit.category)}</Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={habbit.title}
-                className={classes.wideColumn}
-              />
-              <ListItemSecondaryAction>
-                <IconButton
-                  edge="end"
-                  aria-label="delete"
-                  onClick={(e) => onClickNewCommitDelete(habbit._id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
+        {commitHabbits.length > 0 && (
+          <>
+            <DialogContentText>New commited</DialogContentText>
+            <List>
+              {commitHabbits.map((habbit) => (
+                <ListItem key={habbit._id + "commit"}>
+                  <ListItemAvatar>
+                    <Avatar>{selectIcon(habbit.category)}</Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={habbit.title}
+                    className={classes.wideColumn}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={(e) => onClickNewCommitDelete(habbit._id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </>
+        )}
       </DialogContent>
       <DialogActions>
         <Button variant="contained" color="primary" onClick={submitCommit}>
