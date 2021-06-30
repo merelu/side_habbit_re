@@ -4,7 +4,6 @@ import axios, { AxiosError } from "axios";
 import dayjs from "dayjs";
 
 export interface IPushCommitedBody {
-  writer: string;
   habbitId: string;
   createAt: Date;
 }
@@ -27,8 +26,8 @@ interface IAddCommitBody {
 
 export const getCommited = createAsyncThunk(
   "commits/get",
-  async (userId: string, { rejectWithValue }) => {
-    const response = await localStorage.getItem(`${userId}-commited`);
+  (userId: string, { rejectWithValue }) => {
+    const response = localStorage.getItem(`${userId}-commited`);
     if (response === null) {
       return rejectWithValue(
         "관리할 commit이 없습니다. 새 commit 하기위해 수행하신 습관을 선택해주세요"
@@ -45,7 +44,7 @@ export const addCommited = createAsyncThunk<
   { rejectValue: string }
 >("commits/add", async (body, { rejectWithValue }) => {
   const commited: ICommit[] = body.commited.map((commit) => ({
-    writer: body.userId,
+    writer: commit.writer,
     habbitId: commit._id,
     title: commit.title,
     category: commit.category,
@@ -113,28 +112,6 @@ export const pushCommited = createAsyncThunk<
     const response = await axios.post<IPushResponse>(
       "/api/commits/pushCommited",
       body,
-      { withCredentials: true }
-    );
-    return response.data;
-  } catch (err) {
-    let error: AxiosError<IValidationErrors> = err;
-    if (!error.response) {
-      throw err;
-    }
-    return rejectWithValue(err.response.data);
-  }
-});
-
-export const getTodayPushed = createAsyncThunk<
-  IPushResponse,
-  string,
-  {
-    rejectValue: IValidationErrors;
-  }
->("commits/getTodayPushed", async (date, { rejectWithValue }) => {
-  try {
-    const response = await axios.get<IPushResponse>(
-      `/api/commits/getTodayPushed/${date}`,
       { withCredentials: true }
     );
     return response.data;

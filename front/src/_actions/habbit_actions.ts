@@ -6,16 +6,11 @@ interface ICreateHabbitBody {
   title: string;
   category: number;
   expiredDate: Date;
-  writer: string;
   schedule: boolean[];
 }
 interface ICreateHabbitResponse {
   success: boolean;
   habbit: IHabbit;
-}
-interface IGetThisDayHabbit {
-  userId: string;
-  date: string;
 }
 interface IGetHabbitResponse {
   success: boolean;
@@ -48,14 +43,14 @@ export const createHabbit = createAsyncThunk<
 
 export const getTodayHabbits = createAsyncThunk<
   IGetHabbitResponse,
-  IGetThisDayHabbit,
+  void,
   {
     rejectValue: IValidationErrors;
   }
->("habbits/getTodayHabbits", async (data, { rejectWithValue }) => {
+>("habbits/getTodayHabbits", async (date, { rejectWithValue }) => {
   try {
     const response = await axios.get<IGetHabbitResponse>(
-      `/api/habbits/getTodayHabbits/${data.userId}/${data.date}`,
+      `/api/habbits/getTodayHabbits`,
       { withCredentials: true }
     );
     return response.data;
