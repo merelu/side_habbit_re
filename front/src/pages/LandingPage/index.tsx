@@ -1,7 +1,5 @@
-import ContributionGraph from "@components/ContributionGraph";
-
 function LandingPage() {
-  return <ContributionGraph />;
+  return <div>LandingPage</div>;
 }
 
 export default LandingPage;
