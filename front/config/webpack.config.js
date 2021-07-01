@@ -340,6 +340,7 @@ module.exports = function (webpackEnv) {
         "@hocs": path.resolve(__dirname, "../src/hocs"),
         "@store": path.resolve(__dirname, "../src/store"),
         "@typings": path.resolve(__dirname, "../src/typings"),
+        "@image": path.resolve(__dirname, "../src/image"),
       },
       plugins: [
         // Adds support for installing with Plug'n'Play, leading to faster installs and adding

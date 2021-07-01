@@ -28,7 +28,8 @@
       "@pages/*": ["src/pages/*"],
       "@hocs/*":["src/hocs/*"],
       "@store/*":["src/store/*"],
-      "@typings/*": ["src/typings/*"]
+      "@typings/*": ["src/typings/*"],
+      "@image/*":["src/image/*"],
     }
   },
   "include": [
