@@ -3,7 +3,12 @@ import { withStyles } from "@material-ui/styles";
 
 export const useCustomTapsStyles = makeStyles((theme: Theme) =>
   createStyles({
-    paper: { width: "100%", margin: "50px 0", borderRadius: "15px 15px 0 0" },
+    paper: {
+      width: "100%",
+      margin: "50px 0",
+      paddingBottom: "15px",
+      borderRadius: "15px 15px 15px 15px",
+    },
     table: {
       minWidth: 300,
     },
@@ -21,7 +26,7 @@ export const useCustomTapsStyles = makeStyles((theme: Theme) =>
 export const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
     head: {
-      backgroundColor: theme.palette.primary.dark,
+      backgroundColor: theme.palette.secondary.light,
       color: theme.palette.common.white,
       fontSize: 18,
     },

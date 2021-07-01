@@ -15,9 +15,9 @@ const useStyles = makeStyles(() =>
         width: "100%",
       },
       body: {
-        backgroundColor: "#f4f6f8",
         height: "100%",
         width: "100%",
+        background: "linear-gradient(180deg ,#4a06a3 25% , #6908e8)",
       },
       a: {
         textDecoration: "none",

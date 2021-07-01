@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Container,
   Divider,
   FormControlLabel,
   Typography,
@@ -38,87 +39,99 @@ function LoginPage() {
     : "";
 
   return (
-    <Formik
-      initialValues={{ email: initialEmail, password: "" }}
-      validationSchema={loginSchema}
-      onSubmit={async (values, { setSubmitting }) => {
-        const resultAction = await dispatch(loginUser(values));
-        if (loginUser.fulfilled.match(resultAction)) {
-          if (rememberMe === true) {
-            localStorage.setItem("rememberMe", values.email);
-          } else {
-            localStorage.removeItem("rememberMe");
-          }
-          dispatch(push("/"));
-          dispatch(occur("로그인 성공!"));
-        } else {
-          if (resultAction.payload) {
-            dispatch(occurError(resultAction.payload.errorMessage));
-          }
-        }
+    <Container
+      maxWidth="lg"
+      style={{
+        height: "calc(100% - 64px)",
+        display: "flex",
+        flexDirection: "column",
+        background: "#f4f6f8",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      {(props) => {
-        const { handleSubmit } = props;
-        return (
-          <Form className={classes.form} onSubmit={handleSubmit}>
-            <Typography variant="h4" color="primary" align="center">
-              Login
-            </Typography>
-            <Divider className={classes.divider} />
-            <Box className={classes.box} marginBottom={3}>
-              <Field
-                className={classes.field}
-                component={TextField}
-                name="email"
-                type="email"
-                label="Email"
-                helperText="Please Enter Email"
-              />
-            </Box>
-            <Box className={classes.box} marginBottom={3}>
-              <Field
-                className={classes.field}
-                component={TextField}
-                name="password"
-                type="password"
-                label="Password"
-                helperText="Please Enter Password"
-              />
-            </Box>
-            <Box className={classes.box}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={rememberMe}
-                    onChange={handleRememberMe}
-                    color="primary"
-                  />
-                }
-                label="Remember me"
-              />
-              <Link className={classes.link} to="#">
-                forgot password
-              </Link>
-            </Box>
-            <Button
-              className={classes.loginButton}
-              variant="contained"
-              color="primary"
-              type="submit"
-            >
-              Log in
-            </Button>
-            <Box className={classes.box_register}>
-              Or{" "}
-              <Link className={classes.link} to="/register">
-                register now!
-              </Link>
-            </Box>
-          </Form>
-        );
-      }}
-    </Formik>
+      <Formik
+        initialValues={{ email: initialEmail, password: "" }}
+        validationSchema={loginSchema}
+        onSubmit={async (values, { setSubmitting }) => {
+          const resultAction = await dispatch(loginUser(values));
+          if (loginUser.fulfilled.match(resultAction)) {
+            if (rememberMe === true) {
+              localStorage.setItem("rememberMe", values.email);
+            } else {
+              localStorage.removeItem("rememberMe");
+            }
+            dispatch(push("/"));
+            dispatch(occur("로그인 성공!"));
+          } else {
+            if (resultAction.payload) {
+              dispatch(occurError(resultAction.payload.errorMessage));
+            }
+          }
+        }}
+      >
+        {(props) => {
+          const { handleSubmit } = props;
+          return (
+            <Form className={classes.form} onSubmit={handleSubmit}>
+              <Typography variant="h4" color="primary" align="center">
+                Login
+              </Typography>
+              <Divider className={classes.divider} />
+              <Box className={classes.box} marginBottom={3}>
+                <Field
+                  className={classes.field}
+                  component={TextField}
+                  name="email"
+                  type="email"
+                  label="Email"
+                  helperText="Please Enter Email"
+                />
+              </Box>
+              <Box className={classes.box} marginBottom={3}>
+                <Field
+                  className={classes.field}
+                  component={TextField}
+                  name="password"
+                  type="password"
+                  label="Password"
+                  helperText="Please Enter Password"
+                />
+              </Box>
+              <Box className={classes.box}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={rememberMe}
+                      onChange={handleRememberMe}
+                      color="primary"
+                    />
+                  }
+                  label="Remember me"
+                />
+                <Link className={classes.link} to="#">
+                  forgot password
+                </Link>
+              </Box>
+              <Button
+                className={classes.loginButton}
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
+                Log in
+              </Button>
+              <Box className={classes.box_register}>
+                Or{" "}
+                <Link className={classes.link} to="/register">
+                  register now!
+                </Link>
+              </Box>
+            </Form>
+          );
+        }}
+      </Formik>
+    </Container>
   );
 }
 

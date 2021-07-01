@@ -17,22 +17,12 @@ function App() {
     <ThemeProvider theme={theme}>
       <GlobalStyles />
       <MainNavbar />
-      <Container
-        maxWidth="lg"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Switch>
-          <Route exact path="/" component={Auth(LandingPage, true)} />
-          <Route path="/login" component={Auth(LoginPage, false)} />
-          <Route path="/register" component={Auth(RegisterPage, false)} />
-          <Route path="/myHabbit" component={Auth(MyHabbitPage, true)} />
-        </Switch>
-      </Container>
+      <Switch>
+        <Route exact path="/" component={Auth(LandingPage, null)} />
+        <Route path="/login" component={Auth(LoginPage, false)} />
+        <Route path="/register" component={Auth(RegisterPage, false)} />
+        <Route path="/myHabbit" component={Auth(MyHabbitPage, true)} />
+      </Switch>
       <CustomSnackbar />
     </ThemeProvider>
   );

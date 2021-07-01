@@ -2,7 +2,7 @@ import React from "react";
 import { Field, Form, Formik } from "formik";
 import { TextField } from "formik-material-ui";
 import * as Yup from "yup";
-import { Box, Button, Divider, Typography } from "@material-ui/core";
+import { Box, Button, Divider, Typography, Container } from "@material-ui/core";
 import { useRegisterPageStyles } from "./styles";
 import { useAppDispatch } from "@store/hooks";
 import { push } from "connected-react-router";
@@ -25,87 +25,104 @@ function RegisterPage() {
   const classes = useRegisterPageStyles();
 
   return (
-    <Formik
-      initialValues={{ email: "", name: "", password: "", confirmPassword: "" }}
-      validationSchema={registerSchema}
-      onSubmit={async (values, { setSubmitting }) => {
-        const resultAction = await dispatch(
-          registerUser({
-            email: values.email,
-            name: values.name,
-            password: values.password,
-          })
-        );
-        if (registerUser.fulfilled.match(resultAction)) {
-          dispatch(push("/login"));
-          dispatch(occur("회원가입 성공!"));
-        } else {
-          if (resultAction.payload) {
-            dispatch(occurError(resultAction.payload.errorMessage));
-          }
-        }
+    <Container
+      maxWidth="lg"
+      style={{
+        height: "calc(100% - 64px)",
+        display: "flex",
+        flexDirection: "column",
+        background: "#f4f6f8",
+        justifyContent: "center",
+        alignItems: "center",
       }}
     >
-      {(props) => {
-        const { handleSubmit } = props;
-        return (
-          <Form className={classes.form} onSubmit={handleSubmit}>
-            <Typography variant="h4" color="primary" align="center">
-              Register
-            </Typography>
-            <Divider className={classes.divider} />
-            <Box className={classes.box} marginBottom={3}>
-              <Field
-                className={classes.field}
-                component={TextField}
-                name="email"
-                type="email"
-                label="Email"
-                helperText="Please Enter Email"
-              />
-            </Box>
-            <Box className={classes.box} marginBottom={3}>
-              <Field
-                className={classes.field}
-                component={TextField}
-                name="name"
-                type="text"
-                label="Name"
-                helperText="Please Enter Name"
-              />
-            </Box>
-            <Box className={classes.box} marginBottom={3}>
-              <Field
-                className={classes.field}
-                component={TextField}
-                name="password"
-                type="password"
-                label="Password"
-                helperText="Please Enter Password"
-              />
-            </Box>
-            <Box className={classes.box} marginBottom={3}>
-              <Field
-                className={classes.field}
-                component={TextField}
-                name="confirmPassword"
-                type="password"
-                label="Confirm Password"
-                helperText="Please Enter Confirm Password"
-              />
-            </Box>
-            <Button
-              className={classes.loginButton}
-              variant="contained"
-              color="primary"
-              type="submit"
-            >
-              Register
-            </Button>
-          </Form>
-        );
-      }}
-    </Formik>
+      <Formik
+        initialValues={{
+          email: "",
+          name: "",
+          password: "",
+          confirmPassword: "",
+        }}
+        validationSchema={registerSchema}
+        onSubmit={async (values, { setSubmitting }) => {
+          const resultAction = await dispatch(
+            registerUser({
+              email: values.email,
+              name: values.name,
+              password: values.password,
+            })
+          );
+          if (registerUser.fulfilled.match(resultAction)) {
+            dispatch(push("/login"));
+            dispatch(occur("회원가입 성공!"));
+          } else {
+            if (resultAction.payload) {
+              dispatch(occurError(resultAction.payload.errorMessage));
+            }
+          }
+        }}
+      >
+        {(props) => {
+          const { handleSubmit } = props;
+          return (
+            <Form className={classes.form} onSubmit={handleSubmit}>
+              <Typography variant="h4" color="primary" align="center">
+                Register
+              </Typography>
+              <Divider className={classes.divider} />
+              <Box className={classes.box} marginBottom={3}>
+                <Field
+                  className={classes.field}
+                  component={TextField}
+                  name="email"
+                  type="email"
+                  label="Email"
+                  helperText="Please Enter Email"
+                />
+              </Box>
+              <Box className={classes.box} marginBottom={3}>
+                <Field
+                  className={classes.field}
+                  component={TextField}
+                  name="name"
+                  type="text"
+                  label="Name"
+                  helperText="Please Enter Name"
+                />
+              </Box>
+              <Box className={classes.box} marginBottom={3}>
+                <Field
+                  className={classes.field}
+                  component={TextField}
+                  name="password"
+                  type="password"
+                  label="Password"
+                  helperText="Please Enter Password"
+                />
+              </Box>
+              <Box className={classes.box} marginBottom={3}>
+                <Field
+                  className={classes.field}
+                  component={TextField}
+                  name="confirmPassword"
+                  type="password"
+                  label="Confirm Password"
+                  helperText="Please Enter Confirm Password"
+                />
+              </Box>
+              <Button
+                className={classes.loginButton}
+                variant="contained"
+                color="primary"
+                type="submit"
+              >
+                Register
+              </Button>
+            </Form>
+          );
+        }}
+      </Formik>
+    </Container>
   );
 }
 
