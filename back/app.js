@@ -39,12 +39,6 @@ if (prod) {
     })
   );
   app.use(hpp());
-  app.use(
-    cors({
-      origin: true,
-      credentials: true,
-    })
-  );
 } else {
   app.use(morgan("dev"));
   app.use(
@@ -55,7 +49,6 @@ if (prod) {
   );
 }
 app.use(express.static(path.join(__dirname, "public")));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
