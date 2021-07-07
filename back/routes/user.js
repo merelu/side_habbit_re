@@ -51,6 +51,7 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         errorMessage: info.reason,
       });
     }
+    console.log(req.user);
     return req.login(user, async (loginErr) => {
       if (loginErr) {
         console.error(loginErr);

@@ -39,6 +39,12 @@ if (prod) {
     })
   );
   app.use(hpp());
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    })
+  );
 } else {
   app.use(morgan("dev"));
   app.use(
