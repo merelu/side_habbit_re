@@ -65,6 +65,7 @@ const sessionOption = {
   secret: process.env.COOKIE_SECRET,
   cookie: {
     httpOnly: true,
+    sameSite: "none",
   },
 };
 if (prod) {
@@ -74,8 +75,6 @@ if (prod) {
 app.use(session(sessionOption));
 app.use(passport.initialize());
 app.use(passport.session());
-
-app.use("/uploads", express.static("uploads"));
 
 //router
 app.use("/api/users", userRouter);
