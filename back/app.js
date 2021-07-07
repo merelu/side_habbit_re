@@ -80,3 +80,7 @@ app.use("/api/commits", commitRouter);
 app.listen(app.get("PORT"), () => {
   console.log(`listening on port ${app.get("PORT")}`);
 });
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
