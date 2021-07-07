@@ -68,14 +68,14 @@ const sessionOption = {
     sameSite: "none",
   },
 };
-if (prod) {
-  sessionOption.cookie.secure = true;
-  sessionOption.cookie.proxy = true;
-}
+// if (prod) {
+//   sessionOption.cookie.secure = true;
+//   sessionOption.cookie.proxy = true;
+// }
 app.use(session(sessionOption));
 app.use(passport.initialize());
 app.use(passport.session());
-
+console.log(sessionOption);
 //router
 app.use("/api/users", userRouter);
 app.use("/api/habbits", habbitRouter);
