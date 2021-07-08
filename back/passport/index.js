@@ -10,12 +10,12 @@ module.exports = () => {
   });
 
   passport.deserializeUser(async (id, done) => {
+    console.log("deserializeUser", id);
     try {
       const user = await User.findOne(
         { _id: id },
         { name: 1, email: 1, role: 1, image: 1 }
       );
-      console.log("deserializeUser", id);
       done(null, user);
     } catch (error) {
       console.error(error);

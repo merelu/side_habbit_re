@@ -7,7 +7,7 @@ const { User } = require("../models/User");
 const router = express.Router();
 
 router.get("/auth", (req, res, next) => {
-  console.log("req.user");
+  console.log("req.user", req.user);
   if (req.user) {
     return res.status(200).json({ success: true, user: req.user });
   } else {

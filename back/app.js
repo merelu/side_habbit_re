@@ -65,6 +65,7 @@ const sessionOption = {
   secret: process.env.COOKIE_SECRET,
   cookie: {
     httpOnly: true,
+    secure: true,
     sameSite: "none",
   },
 };
@@ -75,7 +76,7 @@ const sessionOption = {
 app.use(session(sessionOption));
 app.use(passport.initialize());
 app.use(passport.session());
-console.log(sessionOption);
+
 //router
 app.use("/api/users", userRouter);
 app.use("/api/habbits", habbitRouter);
