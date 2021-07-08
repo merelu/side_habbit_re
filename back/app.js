@@ -18,6 +18,7 @@ const commitRouter = require("./routes/commit");
 
 const passportConfig = require("./passport");
 const connect = require("./models");
+const { isLoggedIn } = require("./routes/middlewares");
 
 const app = express();
 
@@ -81,6 +82,15 @@ app.use(passport.session());
 app.use("/api/users", userRouter);
 app.use("/api/habbits", habbitRouter);
 app.use("/api/commits", commitRouter);
+
+app.get("/session", isLoggedIn, function (req, res) {
+  let userInfo = req.user;
+  console.log(userInfo);
+  res.json({
+    type: "info",
+    message: "session OK!",
+  });
+});
 
 app.listen(app.get("PORT"), () => {
   console.log(`listening on port ${app.get("PORT")}`);
