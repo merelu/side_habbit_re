@@ -74,7 +74,9 @@ export const authUser = createAsyncThunk<
   { rejectValue: IValidationErrors }
 >("users/auth", async (value, { rejectWithValue }) => {
   try {
-    const response = await axios.get<IUserResponse>("/api/users/auth");
+    const response = await axios.get<IUserResponse>("/api/users/auth", {
+      withCredentials: true,
+    });
     return response.data;
   } catch (err) {
     let error: AxiosError<IValidationErrors> = err;
