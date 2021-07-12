@@ -1,7 +1,7 @@
-import { Container } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/core/styles";
 import React from "react";
 import { Route, Switch } from "react-router";
+import dotenv from "dotenv";
 import MainNavbar from "@components/Navbar";
 import CustomSnackbar from "@components/CustomSnackbar";
 import GlobalStyles from "./GlobalStyles";
@@ -11,6 +11,8 @@ import LoginPage from "@pages/LoginPage";
 import MyHabbitPage from "@pages/MyHabbitPage";
 import RegisterPage from "@pages/RegisterPage";
 import theme from "./theme";
+
+dotenv.config();
 
 function App() {
   return (
