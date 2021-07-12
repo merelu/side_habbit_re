@@ -4,6 +4,7 @@ import {
   Paper,
   Typography,
   Button,
+  Container,
   createStyles,
   Theme,
 } from "@material-ui/core";
@@ -15,11 +16,29 @@ import { push } from "connected-react-router";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
+      minHeight: 800,
+      paddingTop: 80,
+    },
+    gridContainer: {
       height: "100%",
-      width: "100%",
     },
     img: {
-      width: "100%",
+      maxWidth: 400,
+    },
+    column1: {
+      maxWidth: 600,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+    },
+    column2: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    paper: {
+      background: "inherit",
     },
     topline: {
       color: theme.palette.warning.light,
@@ -51,23 +70,16 @@ function HeroSection() {
     dispatch(push("/register"));
   };
   return (
-    <>
+    <Container maxWidth="lg" className={classes.container}>
       <Grid
         container
-        className={classes.container}
         justify="center"
         alignItems="center"
-        spacing={1}
+        spacing={2}
+        className={classes.gridContainer}
       >
-        <Grid
-          container
-          sm={12}
-          md={6}
-          alignItems="center"
-          justify="center"
-          direction="column"
-        >
-          <Grid item>
+        <Grid item sm={12} md={6} className={classes.column1}>
+          <Paper elevation={0} className={classes.paper}>
             <Typography variant="h3" gutterBottom className={classes.topline}>
               Info
             </Typography>
@@ -89,9 +101,9 @@ function HeroSection() {
                 Get Started
               </Button>
             </div>
-          </Grid>
+          </Paper>
         </Grid>
-        <Grid container sm={12} md={6} alignItems="center">
+        <Grid item sm={12} md={6} className={classes.column2}>
           <img
             className={classes.img}
             src={heroSection}
@@ -99,7 +111,7 @@ function HeroSection() {
           />
         </Grid>
       </Grid>
-    </>
+    </Container>
   );
 }
 
