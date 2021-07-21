@@ -31,9 +31,7 @@ function Auth(
           }
         }
       };
-      if (option !== null) {
-        auth();
-      }
+      auth();
     }, [dispatch]);
 
     return <SpecificComponent />;

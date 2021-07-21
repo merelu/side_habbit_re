@@ -46,32 +46,36 @@ function PushedList() {
   }, [dispatch, pushedAll, userData]);
 
   return (
-    <Paper className={classes.paper}>
-      <Typography variant="h6" className={classes.title}>
-        {`${
-          pushed.length > 0
-            ? dayjs(pushed[0].createAt).format("YYYY-MM-DD")
-            : "Today"
-        } Pushed Habbits`}
-      </Typography>
-      <Divider />
-      <List>
-        {pushed &&
-          pushed.map((item) => (
-            <ListItem key={item._id}>
-              <ListItemAvatar>
-                <Avatar>{selectIcon(item.category)}</Avatar>
-              </ListItemAvatar>
-              <ListItemText primary={item.title} />
-              <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="detail">
-                  <FindInPageIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-      </List>
-    </Paper>
+    <>
+      {pushed.length > 0 && (
+        <Paper className={classes.paper}>
+          <Typography variant="h6" className={classes.title}>
+            {`${
+              pushed.length > 0
+                ? dayjs(pushed[0].createAt).format("YYYY-MM-DD")
+                : "Today"
+            } Pushed Habbits`}
+          </Typography>
+          <Divider />
+          <List>
+            {pushed &&
+              pushed.map((item) => (
+                <ListItem key={item._id}>
+                  <ListItemAvatar>
+                    <Avatar>{selectIcon(item.category)}</Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={item.title} />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="detail">
+                      <FindInPageIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+          </List>
+        </Paper>
+      )}
+    </>
   );
 }
 
