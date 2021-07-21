@@ -39,6 +39,9 @@ function MainNavbar() {
                 <Button color="primary">
                   <Link to="/myHabbit">My Habbit</Link>
                 </Button>
+                <Button color="primary">
+                  <Link to="/userInfo">User Info</Link>
+                </Button>
                 <IconButton onClick={onClickLogout}>
                   <ExitToAppIcon color="primary" />
                 </IconButton>

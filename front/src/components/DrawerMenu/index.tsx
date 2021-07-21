@@ -12,6 +12,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { useDrawerMenuStyles } from "./styles";
 import { useAppDispatch } from "@store/hooks";
 import { push } from "connected-react-router";
@@ -40,8 +41,13 @@ function DrawerMenu({ userData, onClickLogout }: IDrawerMenu) {
   const onClickLogin = useCallback(() => {
     dispatch(push("/login"));
   }, [dispatch]);
+
   const onClickMyHabbit = useCallback(() => {
     dispatch(push("/myHabbit"));
+  }, [dispatch]);
+
+  const onClickUserInfo = useCallback(() => {
+    dispatch(push("/userInfo"));
   }, [dispatch]);
 
   const menuItemList = (
@@ -58,6 +64,12 @@ function DrawerMenu({ userData, onClickLogout }: IDrawerMenu) {
                 <AssignmentIcon color="primary" />
               </ListItemIcon>
               <ListItemText color="primary" primary="My Habbit" />
+            </ListItem>
+            <ListItem button key="userInfo" onClick={onClickUserInfo}>
+              <ListItemIcon>
+                <AccountCircleIcon color="primary" />
+              </ListItemIcon>
+              <ListItemText color="primary" primary="User Info" />
             </ListItem>
             <Divider />
             <ListItem button key="logout" onClick={onClickLogout}>

@@ -11,6 +11,7 @@ import LoginPage from "@pages/LoginPage";
 import MyHabbitPage from "@pages/MyHabbitPage";
 import RegisterPage from "@pages/RegisterPage";
 import theme from "./theme";
+import UserInfoPage from "@pages/UserInfoPage";
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/login" component={Auth(LoginPage, false)} />
         <Route path="/register" component={Auth(RegisterPage, false)} />
         <Route path="/myHabbit" component={Auth(MyHabbitPage, true)} />
+        <Route path="/userInfo" component={Auth(UserInfoPage, true)} />
       </Switch>
       <CustomSnackbar />
     </ThemeProvider>

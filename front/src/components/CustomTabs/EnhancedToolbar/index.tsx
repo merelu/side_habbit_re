@@ -1,8 +1,16 @@
 import React, { useCallback, useState } from "react";
-import { Toolbar, Typography, Tooltip, Button } from "@material-ui/core";
+import {
+  Toolbar,
+  Typography,
+  Tooltip,
+  Button,
+  Hidden,
+  IconButton,
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import CheckIcon from "@material-ui/icons/Check";
 import BackupIcon from "@material-ui/icons/Backup";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { useCustomTapsStyles } from "@components/CustomTabs/styles";
 import AddHabbitModal from "./AddHabbitModal";
 import CommitModal from "./CommitModal";
@@ -53,41 +61,48 @@ export default function EnhancedToolbar() {
   return (
     <Toolbar className={classes.toolbar}>
       <Typography variant="h5">Habbits</Typography>
-      <div>
-        <Tooltip title="Add">
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="primary"
-            startIcon={<AddIcon />}
-            onClick={onClickAddHabbitModal}
-          >
-            Add Habbit
-          </Button>
-        </Tooltip>
-        <Tooltip title="commit">
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="primary"
-            startIcon={<CheckIcon />}
-            onClick={onClickCommitModal}
-          >
-            Commit
-          </Button>
-        </Tooltip>
-        <Tooltip title="commit">
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="secondary"
-            startIcon={<BackupIcon />}
-            onClick={onClickPushModal}
-          >
-            Push
-          </Button>
-        </Tooltip>
-      </div>
+      <Hidden xsDown>
+        <div>
+          <Tooltip title="Add">
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={onClickAddHabbitModal}
+            >
+              Add Habbit
+            </Button>
+          </Tooltip>
+          <Tooltip title="commit">
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              startIcon={<CheckIcon />}
+              onClick={onClickCommitModal}
+            >
+              Commit
+            </Button>
+          </Tooltip>
+          <Tooltip title="commit">
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="secondary"
+              startIcon={<BackupIcon />}
+              onClick={onClickPushModal}
+            >
+              Push
+            </Button>
+          </Tooltip>
+        </div>
+      </Hidden>
+      <Hidden smUp>
+        <IconButton>
+          <MoreVertIcon />
+        </IconButton>
+      </Hidden>
       <AddHabbitModal open={addHabbitModalOpen} onCloseModal={onCloseModal} />
       <CommitModal open={commitModalOpen} onCloseModal={onCloseModal} />
       <PushModal open={pushModalOpen} onCloseModal={onCloseModal} />
